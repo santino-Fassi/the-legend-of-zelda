@@ -1,0 +1,20 @@
+.unaClaseSinVue {
+    font-size: 1.2em;
+    padding: 1em;
+}
+
+.redClass {
+    background: red;
+    color: white;
+    width: fit-content;
+    margin-inline: auto;
+    border: 2px solid black;
+}
+
+[v-cloak] {
+    display: none;
+}
+
+.centrado {
+    text-align: center;
+}
