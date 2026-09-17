@@ -1,3 +1,9 @@
+body{
+    background: url("../imgs/fondo.png") no-repeat center center fixed;
+    background-size: cover;
+    color: whitesmoke;
+}
+
 .unaClaseSinVue {
     font-size: 1.2em;
     padding: 1em;
@@ -18,3 +24,25 @@
 .centrado {
     text-align: center;
 }
+
+img {
+    display: block;
+    max-width: 100%;
+}
+
+#app {
+    max-width: 1280px;
+    margin: auto;
+}
+
+.contenedor-contenido {
+    position: relative;
+    
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 40px;
+
+    border-radius: 15px;
+    overflow: hidden;
+}
+

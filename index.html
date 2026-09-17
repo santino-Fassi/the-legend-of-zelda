@@ -10,6 +10,8 @@
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
 		integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"
 		defer></script>
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js" defer></script>
+	<script src="scripts/app.js" defer></script>
 </head>
 
 <body>
@@ -19,24 +21,33 @@
 
 		<header>
 			<h1>The Legend of Zelda - Ocarina of Time</h1>
-			<nav class="navbar navbar-expand-lg py-3 px-md-4" data-bs-theme="">
+			<nav class="navbar navbar-expand-lg sticky-top py-3 px-md-4" data-bs-theme="">
 				<div class="container-fluid">
 					<a class="navbar-brand" href="index.html"><img class="d-none d-lg-block logo d-inline-block"
-							src="imgs/game-logo.avif" alt="Logo de Zelda"><span
-							class=" d-lg-none h1 py-3 text-light">Retro Camp</span></a>
+							src="imgs/logo.jpg" alt="Logo de Zelda"><span
+							class=" d-lg-none h1 py-3 text-light">Nintendo</span></a>
 					<button class="navbar-toggler" type="button" data-bs-toggle="collapse"
 						data-bs-target="#navbarNavDropdown">
 						<span class="navbar-toggler-icon"></span>
 					</button>
 					<div class="collapse navbar-collapse" id="navbarNavDropdown">
 						<ul class="navbar-nav">
-							<li class="nav-item"><a class="nav-link active" aria-current="page" href="#">Inicio</a></li>
-							<li class="nav-item"><a class="nav-link" href="#productos">Historia de Hyrule</a></li>
-							<li class="nav-item"><a class="nav-link" href="#reacondicionamiento">Características del
-									juego</a>
+							<li class="nav-item active">
+								<a class="nav-link active" aria-current="page" href="#inicio">Inicio</a>
 							</li>
-							<li class="nav-item"><a class="nav-link" href="#formulario">Galería</a></li>
-							<li class="nav-item"><a class="nav-link" href="#formulario">Quiz de Personalidad</a></li>
+
+							<li class="nav-item">
+								<a class="nav-link" href="#historia">Historia de Hyrule</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="#caracteristicas">Características del juego</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="#c_galeria">Galería</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="#quiz">Quiz de Personalidad</a>
+							</li>
 						</ul>
 					</div>
 				</div>
@@ -47,13 +58,83 @@
 		<main>
 
 			<section id="inicio">
+				
 				<h2>La leyenda renace para una nueva generación</h2>
-				<p>Comienza la batalla por Hyrule. El malvado Ganondorf planea robar la mítica Trifuerza del Reino Sagrado y conquistar el mundo. Ahora Link debe convertirse en el héroe del tiempo y salvar el reino en esta historia clásica, creada desde cero para Nintendo Switch™ 2</p>
+				<img src="imgs/inicio.webp" alt="">
+
+					<div class="contenedor-contenido">
+						<p>Comienza la batalla por Hyrule. El malvado Ganondorf planea robar la mítica Trifuerza del Reino
+							Sagrado y conquistar el mundo. Ahora Link debe convertirse en el héroe del tiempo y salvar el reino
+							en esta historia clásica, creada desde cero para Nintendo Switch™ 2</p>
+
+						<p>The Legend of Zelda es una de las sagas más reconocidas de Nintendo y una de las series más
+							importantes dentro de los videojuegos de aventura. Desde su primera entrega, la saga se ha
+							caracterizado por combinar exploración, combates, resolución de acertijos y descubrimiento,
+							invitando al jugador a recorrer mundos llenos de secretos.</p>
+
+						<p>Una de las características principales de Zelda es la libertad que ofrece al jugador para explorar.
+							Bosques, montañas, templos, aldeas y mazmorras esconden secretos y desafíos que hacen que cada
+							aventura sea diferente. Además, cada entrega introduce nuevos personajes, mecánicas y elementos que
+							amplían el universo de la saga.</p>
+					</div>
 
 			</section>
 
 			<section id="historia">
-				
+				<h2>Descubre la historia</h2>
+				<h3>El nacimiento del reino de Hyrule</h3>
+				<blockquote>
+
+					<div class="contenedor-contenido">
+						<p>
+							Antes de que el tiempo comenzara, antes de que los espíritus y la vida existieran... Tres diosas
+							doradas descendieron sobre el caos que era Hyrule: Din, la diosa del Poder... Nayru, la diosa de
+							la Sabiduría... y Farore, la diosa del Valor.<br>
+							Din, con sus fuertes brazos de fuego, cultivó la tierra y creó el suelo rojo. Nayru derramó su
+							sabiduría sobre la tierra y dio el espíritu de la ley al mundo. Farore, con su rica alma,
+							produjo todas las formas de vida que mantendrían la ley.<br>
+							Las tres grandes diosas, habiendo completado su trabajo, partieron hacia los cielos. Y en el
+							punto de donde salieron, dejaron tres triángulos dorados. Desde entonces, el lugar donde se
+							encuentran los triángulos sagrados ha sido el Reino Sagrado.
+						</p>
+						<p>-El Gran Árbol Deku</p>
+					</div>
+				</blockquote>
+
+				<img src="" alt="">
+
+				<h3>Una tierra dividida</h3>
+
+				<div class="contenedor-contenido">
+					<p>Antes de la aventura de Link, Hyrule atravesó una época de enfrentamientos que cambiaría para siempre
+						el destino de sus pueblos.</p>
+
+					<p>Hace mucho tiempo, el reino de Hyrule se vio envuelta en una gran guerra, muchos afirman que se
+						inició gracias a la codicia de la gente. Querían los tres triángulos dorados, la Trifuerza.<br>
+						En medio del caos, una mujer huyó del campo de batalla llevando consigo a su bebé. En el camino
+						hacia un lugar seguro, fue gravemente herida, pero pudo llegar hasta el Bosque Kokiri. Allí, con su
+						último aliento, dejó al niño al cuidado del Gran Árbol Deku, esperando que pudiera crecer lejos de
+						la guerra. El nombre del bebé era Link.<br>
+						Este chico creció en el bosque junto con los Kokiri, una raza de niños eternos que viven dentro del
+						bosque al cuidado del Gran Árbol y sus hadas compañeras. La infancia de Link no fue fácil, puesto
+						que como no era uno de ellos y no tenía su propia hada, siempre lo trataron diferente.
+					</p>
+				</div>
+
+				<img src="" alt="">
+
+				<h3>Una terrible visión</h3>
+				<div class="contenedor-contenido">
+					<p>
+						Años después de la terrible guerra de Hyrule, Link tuvo una extraña pesadilla cuya gravedad aún no era capaz de comprender.<br>
+						Una mujer con ropajes de guerrera huía a caballo junto a una niña, perseguidas desde el castillo por un oscuro jinete. Cuando el jinete las perdió de vista, reparó en Link y lo observó con una sonrisa temible, justo antes de que despertara.<br>
+						Link aún no sabía quiénes eran aquellas personas ni qué significaba aquel sueño. Solo sabía que algo estaba a punto de comenzar. Ya que, al despertar, descubrió que por fin había recibido a su hada.<br>
+						Navi, la pequeña hada enviada para ser la compañera de Link, le explica que el Árbol Deku lo necesita.
+					</p>
+				</div>
+
+				<img src="imgs/linkYNavi.avif" alt="">
+
 			</section>
 
 			<section id="mejoras">
@@ -61,10 +142,12 @@
 			</section>
 
 			<section id="caracteristicas">
-				<caracteristicas class="lista-caracteristicas"></caracteristicas>
+				<div class="contenedor-contenido">
+					<caracteristicas class="lista-caracteristicas"></caracteristicas>
+				</div>
 			</section>
 
-			<section id="galeria">
+			<section id="c_galeria">
 				<h2>Galería</h2>
 
 				<div class="galeria-principal">
@@ -86,10 +169,6 @@
 
 	</div>
 
-
-
-	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-	<script src="scripts/app.js"></script>
 
 </body>
 
