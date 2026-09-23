@@ -100,37 +100,37 @@ app.component("carousel", {
             imagenes: [
                 {
                     id: 1,
-                    img: "imgs/galeria1.webp",
+                    img: "imgs/galeria/galeria1.webp",
                     alt: ""
                 },
                 {
                     id: 2,
-                    img: "imgs/galeria2.webp",
+                    img: "imgs/galeria/galeria2.webp",
                     alt: ""
                 },
                 {
                     id: 3,
-                    img: "imgs/galeria3.webp",
+                    img: "imgs/galeria/galeria3.webp",
                     alt: ""
                 },
                 {
                     id: 4,
-                    img: "imgs/galeria4.webp",
+                    img: "imgs/galeria/galeria4.webp",
                     alt: ""
                 },
                 {
                     id: 5,
-                    img: "imgs/galeria5.webp",
+                    img: "imgs/galeria/galeria5.webp",
                     alt: ""
                 },
                 {
                     id: 6,
-                    img: "imgs/galeria6.webp",
+                    img: "imgs/galeria/galeria6.webp",
                     alt: ""
                 },
                 {
                     id: 7,
-                    img: "imgs/galeria7.webp",
+                    img: "imgs/galeria/galeria7.webp",
                     alt: ""
                 }
             ]
