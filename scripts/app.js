@@ -31,6 +31,92 @@ app.component("mi-componente", {
     
 });
 
+app.component("mejoras", {
+    data() {
+        return {
+            tarjetas: [
+                {
+                    id: 1,
+                    titulo: "Una Hyrule completamente renovada",
+                    texto: "El reino de Hyrule ha sido reconstruido con nuevos gráficos, texturas, iluminación y materiales. Lugares que reconocés al instante vuelven a la vida con mucho más detalle.",
+                    img: "imgs/ocarina.webp",
+                    alt: ""
+                },
+                {
+                    id: 2,
+                    titulo: "Link se mueve de una forma diferente",
+                    texto: "El control fue rediseñado para una experiencia más moderna: movimiento más suave, salto manual y cámara libre para explorar Hyrule con mayor libertad.",
+                    img: "imgs/templo-agua.avif",
+                    alt: ""
+                },
+                {
+                    id: 3,
+                    titulo: "Hyrule nunca estático",
+                    texto: "El ciclo de día y noche ahora continúa también dentro de los pueblos, haciendo que lugares como la Ciudadela de Hyrule se sientan más vivos mientras los recorrés.",
+                    img: "imgs/ciudadela.avif",
+                    alt: ""
+                },
+                {
+                    id: 4,
+                    titulo: "Cinemáticas reimaginadas y con doblajes de voz",
+                    texto: "Las cinemáticas cuentan con actuaciones de voz y los personajes reciben nuevos diálogos, aportando otra dimensión a momentos que los fans recuerdan desde hace años.",
+                    img: "imgs/darunia.avif",
+                    alt: ""
+                },
+                {
+                    id: 5,
+                    titulo: "Canta las canciones y descubre sus efectos",
+                    texto: "Con el micrófono de Switch 2, podés tararear una melodía aprendida para que Link la toque dentro del juego.",
+                    img: "imgs/sheik.avif",
+                    alt: ""
+                },
+                {
+                    id: 6,
+                    titulo: "Tu historia, reunida en un solo lugar",
+                    texto: "Una nueva función permite consultar tu progreso y el próximo objetivo de la aventura. A medida que avances en el juego, un gran tapiz de la historia se va completando y convierte tu recorrido en una verdadera leyenda.",
+                    img: "imgs/progreso.avif",
+                    alt: ""
+                }
+            ]
+
+        };
+    },
+    template: `
+        <div>
+            <h2>¿Qué trae este remake?</h2>
+            <p>Mirá de cerca cómo esta nueva versión reconstruye la aventura que ya conocés y la adapta a una nueva generación.</p>
+
+            <div class="row justify-content-center g-4">
+                <div class="col-12">
+                    <div class="card h-100">
+                        <img :src="tarjetas[0].img" :alt="tarjetas[0].alt" class="card-img-top">
+                        <div class="card-body">
+                            <h3 class="card-title">{{tarjetas[0].titulo}}</h3>
+                            <p class="card-text">{{tarjetas[0].texto}}</p>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-12 col-md-6 col-lg-4" v-for="tarjeta in tarjetas.slice(1)" :key="tarjeta.id">
+                    <div class="card h-100">
+                        <img :src="tarjeta.img" :alt="tarjeta.alt" class="card-img-top">
+                        <div class="card-body">
+                            <h3 class="card-title">{{tarjeta.titulo}}</h3>
+                            <p class="card-text">{{tarjeta.texto}}</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    `,
+    methods: {
+
+    }
+});
+
 app.component("caracteristicas", {
     data() {
         return {
