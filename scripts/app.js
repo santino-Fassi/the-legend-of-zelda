@@ -41,8 +41,8 @@ app.component("descubre", {
         <div>
 			<nav>
 				<div class="nav nav-tabs" id="nav-tab" role="tablist">
-					<button class="nav-link active" id="nav-historia-tab" data-bs-toggle="tab" data-bs-target="#historia" type="button" role="tab" aria-controls="nav-historia" aria-selected="true">Historia del mundo</button>
-					<button class="nav-link" id="nav-mejoras-tab" data-bs-toggle="tab" data-bs-target="#mejoras" type="button" role="tab" aria-controls="nav-mejoras" aria-selected="false">Cambios y Mejoras</button>
+					<button class="nav-link active" id="nav-historia-tab" data-bs-toggle="tab" data-bs-target="#historia" type="button" role="tab" aria-controls="historia" aria-selected="true">Historia del mundo</button>
+					<button class="nav-link" id="nav-mejoras-tab" data-bs-toggle="tab" data-bs-target="#mejoras" type="button" role="tab" aria-controls="mejoras" aria-selected="false">Cambios y Mejoras</button>
 				</div>
 			</nav>
 			<div class="tab-content" id="nav-tabContent">
@@ -50,7 +50,7 @@ app.component("descubre", {
 					<historia></historia>
 				</section>
 
-				<section id="mejoras" class="tab-pane fade" role="tabpanel" aria-labelledby="nav-mejoras-tab" tabindex="1">
+				<section id="mejoras" class="tab-pane fade" role="tabpanel" aria-labelledby="nav-mejoras-tab" tabindex="0">
 					<mejoras></mejoras>
 				</section>
 			</div>
@@ -346,7 +346,51 @@ app.component("carousel", {
     }
 });
 
+app.component("piedra", {
+    data() {
+        return {
+            hoy: new Date(),
+            lanzamiento: new Date(2026, 10, 5),
+            rebotando: false
+        }
+    },
+    template: `
+        <div>
+            <a tabindex="0" class="btn" type="button" data-bs-custom-class="pop-overs" data-bs-trigger="focus" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="left" :data-bs-content="this.mensaje()" @click="rebotar()">
+                <img class="piedra-chismosa" :class="{'rebotar': rebotando}" @animationend="finRebote" src="imgs/gossip-stone.webp" alt="Piedra Chismosa">
+            </a>
+        </div>
+    `,
+    methods: {
+        rebotar() {
+            if (!this.rebotando) this.rebotando = true;
+        },
+
+        finRebote() {
+            this.rebotando = false;
+        },
+
+        diasRestantes() {
+            const diferencia = this.lanzamiento - this.hoy;
+            const dias = Math.ceil(diferencia / (1000 * 60 * 60 * 24));
+
+            return dias;
+        },
+        mensaje() {
+            const dias = this.diasRestantes();
+            if (dias > 0) {
+                return `¡BOINNG! ¡BOINNG! ¡Faltan ${dias} días para el lanzamiento!`
+            }
+            else {
+                return `¡BOINNG! ¡BOINNG! ¡El juego ya está disponible!`
+            }
+        }
+    }
+});
+
 const viewModel = app.mount('#app');
 
-
-viewModel.mensaje = "mesi";
+const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]');
+const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl), {
+    trigger: "focus"
+});
