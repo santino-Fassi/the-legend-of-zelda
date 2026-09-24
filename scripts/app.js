@@ -31,6 +31,106 @@ app.component("mi-componente", {
     
 });
 
+app.component("descubre", {
+    data() {
+        return {
+
+        };
+    },
+    template: `
+        <div>
+			<nav>
+				<div class="nav nav-tabs" id="nav-tab" role="tablist">
+					<button class="nav-link active" id="nav-historia-tab" data-bs-toggle="tab" data-bs-target="#historia" type="button" role="tab" aria-controls="nav-historia" aria-selected="true">Historia del mundo</button>
+					<button class="nav-link" id="nav-mejoras-tab" data-bs-toggle="tab" data-bs-target="#mejoras" type="button" role="tab" aria-controls="nav-mejoras" aria-selected="false">Cambios y Mejoras</button>
+				</div>
+			</nav>
+			<div class="tab-content" id="nav-tabContent">
+				<section id="historia" class="tab-pane fade show active" role="tabpanel" aria-labelledby="nav-historia-tab" tabindex="0">
+					<historia></historia>
+				</section>
+
+				<section id="mejoras" class="tab-pane fade" role="tabpanel" aria-labelledby="nav-mejoras-tab" tabindex="1">
+					<mejoras></mejoras>
+				</section>
+			</div>
+        </div>
+    `,
+    methods: {
+
+    }
+});
+
+app.component("historia", {
+    data() {
+        return {
+
+        };
+
+    },
+    template: `
+    <div>
+        <h2>Descubre la historia</h2>
+        <h3>El nacimiento del reino de Hyrule</h3>
+        <blockquote>
+            <div class="contenedor-contenido">
+                <p>
+                    Antes de que el tiempo comenzara, antes de que los espíritus y la vida existieran... Tres diosas
+                    doradas descendieron sobre el caos que era Hyrule: Din, la diosa del Poder... Nayru, la diosa de
+                    la Sabiduría... y Farore, la diosa del Valor.<br>
+                    Din, con sus fuertes brazos de fuego, cultivó la tierra y creó el suelo rojo. Nayru derramó su
+                    sabiduría sobre la tierra y dio el espíritu de la ley al mundo. Farore, con su rica alma,
+                    produjo todas las formas de vida que mantendrían la ley.<br>
+                    Las tres grandes diosas, habiendo completado su trabajo, partieron hacia los cielos. Y en el
+                    punto de donde salieron, dejaron tres triángulos dorados, la Trifuerza. Un triangulo sagrado capaz de hacer realidad cualquier deseo. Desde entonces, el lugar donde se
+                    encuentra la Trifuerza ha sido el Reino Sagrado.
+                </p>
+                <p>-El Gran Árbol Deku</p>
+            </div>
+        </blockquote>
+
+        <img src="imgs/historia/las-tres-diosas.webp" alt="">
+
+        <h3>Una tierra dividida</h3>
+
+        <div class="contenedor-contenido">
+            <p>Antes de la aventura de Link, Hyrule atravesó una época de enfrentamientos que cambiaría para siempre
+                el destino de sus pueblos.</p>
+
+            <p>Hace mucho tiempo, el reino de Hyrule se vio envuelta en una gran guerra, muchos afirman que se
+                inició gracias a la codicia de la gente. Querían los tres triángulos dorados, la Trifuerza.<br>
+                En medio del caos, una mujer huyó del campo de batalla llevando consigo a su bebé. En el camino
+                hacia un lugar seguro, fue gravemente herida, pero pudo llegar hasta el Bosque Kokiri. Allí, con su
+                último aliento, dejó al niño al cuidado del Gran Árbol Deku, esperando que pudiera crecer lejos de
+                la guerra. El nombre del bebé era Link.<br>
+                Este chico creció en el bosque junto con los Kokiri, una raza de niños eternos que viven dentro del
+                bosque al cuidado del Gran Árbol y sus hadas compañeras. La infancia de Link no fue fácil, puesto
+                que como no era uno de ellos y no tenía su propia hada, siempre lo trataron diferente.
+            </p>
+        </div>
+
+        <img src="imgs/historia/conflicto.webp" alt="">
+
+        <h3>Una terrible visión</h3>
+        <div class="contenedor-contenido">
+            <p>
+                Años después de la terrible guerra de Hyrule, Link tuvo una extraña pesadilla cuya gravedad aún no era capaz de comprender.<br>
+                Una mujer con ropajes de guerrera huía a caballo junto a una niña, perseguidas desde el castillo por un oscuro jinete. Cuando el jinete las perdió de vista, reparó en Link y lo observó con una sonrisa temible, justo antes de que despertara.<br>
+                Link aún no sabía quiénes eran aquellas personas ni qué significaba aquel sueño. Solo sabía que algo estaba a punto de comenzar. Ya que, al despertar, descubrió que por fin había recibido a su hada.<br>
+                Navi, la pequeña hada enviada para ser la compañera de Link, le explica que el Árbol Deku lo necesita.
+            </p>
+        </div>
+
+        <img src="imgs/historia/link-durmiendo.webp" alt="">
+
+    </div>
+
+    `,
+    methods: {
+
+    }
+});
+
 app.component("mejoras", {
     data() {
         return {
