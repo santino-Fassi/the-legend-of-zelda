@@ -2,7 +2,7 @@ const app = Vue.createApp({
     data() {
         return {
             mensaje: "Aprendiendo Vue",
-            visible: true
+            visible: true,
         }
     },
     methods: {
@@ -384,6 +384,185 @@ app.component("piedra", {
             else {
                 return `¡BOINNG! ¡BOINNG! ¡El juego ya está disponible!`
             }
+        }
+    }
+});
+
+app.component("quiz-personalidad", {
+    data() {
+        return {
+            nombre: "",
+            respuestas: [],
+            preguntas: [
+                {
+                    titulo: "El camino desconocido",
+                    texto: "Encontrás un sendero que no aparece en ningún mapa. ¿Qué hacés?",
+                    opciones: [
+                        {valor: '{"curiosidad": 2, "coraje": 1}', texto: "A. Lo sigo inmediatamente. Quiero saber a dónde lleva."},
+                        {valor: '{"sabiduria": 2, "inteligencia": 1}', texto: "B. Primero observo el entorno y busco posibles peligros."},
+                        {valor: '{"astucia": 2, "poder": 1}', texto: "C. Sigo cautelosamente el camino, pero desde las sombras."},
+                        {valor: '{"empatia": 2, "sabiduria": 1}', texto: "D. Marco un cartel en la entrada del sendero para futuros aventureros antes de continuar."}
+                    ]
+                },
+                {
+                    titulo: "Frente al peligro",
+                    texto: "Un enemigo mucho más fuerte que vos bloquea el camino.",
+                    opciones: [
+                        {valor: '{"coraje": 2, "poder": 1}', texto: "A. Me enfrento a él. Retroceder no es una opción."},
+                        {valor: '{"inteligencia": 2, "sabiduria": 1}', texto: "B. Estudio sus movimientos antes de atacar."},
+                        {valor: '{"astucia": 2, "inteligencia": 1}', texto: "C. Busco una forma de distraerlo o engañarlo."},
+                        {valor: '{"sabiduria": 2, "curiosidad": 1}', texto: "D. Intento encontrar otro camino. No tiene sentido arriesgarse innecesariamente."}
+                    ]
+                },
+                {
+                    titulo: "Un objeto misterioso",
+                    texto: "Encontrás una reliquia antigua. Nadie sabe para qué sirve.",
+                    opciones: [
+                        {valor: '{"curiosidad": 2, "inteligencia": 1}', texto: "A. Intento descubrir su función por mi cuenta."},
+                        {valor: '{"sabiduria": 2, "curiosidad": 1}', texto: "B. Investigo a mi alrededor en busca de más información."},
+                        {valor: '{"poder": 2, "astucia": 1}', texto: "C. Me la quedo. Mejor tenerlo yo antes que mis enemigos."},
+                        {valor: '{"empatia": 2, "sabiduria": 1}', texto: "D. Busco a alguien que me pueda ayudar a entenderla."}
+                    ]
+                },
+                {
+                    titulo: "Tu compañero",
+                    texto: "¡Tu compañero está en peligro! ¿Qué hacés?",
+                    opciones: [
+                        {valor: '{"coraje": 2, "empatia": 1}', texto: "A. Voy directamente a rescatarlo, aunque sea peligroso."},
+                        {valor: '{"inteligencia": 2, "empatia": 1}', texto: "B. Busco la manera más segura de salvarlo."},
+                        {valor: '{"astucia": 2, "inteligencia": 1}', texto: "C. Planeo una trampa o distracción para rescatarlo sin enfrentar al enemigo directamente."},
+                        {valor: '{"poder": 2, "astucia": 1}', texto: "D. Si no se puede defender solo, no me sirve."}
+                    ]
+                },
+                {
+                    titulo: "¿Qué buscás en una aventura?",
+                    texto: "¿Qué es lo que más te atrae de una aventura?",
+                    opciones: [
+                        {valor: '{"curiosidad": 2, "sabiduria": 1}', texto: "A. Descubrir lugares que nadie conoce."},
+                        {valor: '{"coraje": 2, "poder": 1}', texto: "B. Superar desafíos cada vez más difíciles."},
+                        {valor: '{"inteligencia": 2, "curiosidad": 1}', texto: "C. Resolver misterios y descubrir cómo funcionan las cosas."},
+                        {valor: '{"empatia": 2, "sabiduria": 1}', texto: "D. Conocer personas y aprender sus historias."},
+                        {valor: '{"poder": 2, "coraje": 1}', texto: "E. Convertirme en alguien capaz de cambiar el destino."}
+                    ]
+                },
+                {
+                    titulo: "Tu lugar en Hyrule",
+                    texto: "¿Dónde te gustaría pasar una tarde?",
+                    opciones: [
+                        {valor: '{"curiosidad": 2, "empatia": 1}', texto: "A. Bosque Kokiri."},
+                        {valor: '{"coraje": 2, "poder": 1}', texto: "B. Montaña de la Muerte."},
+                        {valor: '{"sabiduria": 2, "empatia": 1}', texto: "C. Dominio Zora."},
+                        {valor: '{"poder": 2, "astucia": 1}', texto: "D. Fortaleza Gerudo."},
+                        {valor: '{"inteligencia": 2, "sabiduria": 1}', texto: "E. Ciudadela de Hyrule"},
+                        {valor: '{"astucia": 2, "poder": 1}', texto: "F. Aldea Kakariko"}
+                    ]
+                },
+                {
+                    titulo: "Una decisión difícil",
+                    texto: "Tenés que elegir entre dos caminos. El camino A tiene poco riesgo pero menor recompensa, y el camino B tiene mayor riesgo pero mayor recompensa.",
+                    opciones: [
+                        {valor: '{"sabiduria": 2, "inteligencia": 1}', texto: "A. Camino A. Prefiero ir a lo seguro siempre."},
+                        {valor: '{"coraje": 2, "poder": 1}', texto: "B. Camino B. Las mejores oportunidades siempre implican riesgos."},
+                        {valor: '{"inteligencia": 2, "curiosidad": 1, "astucia": 1}', texto: "C. Intento descubrir ambas recompensas antes de decidir."},
+                        {valor: '{"empatia": 2, "sabiduria": 1}', texto: "D. Dejo que otro decida y sigo con su plan."}
+                    ]
+                },
+                {
+                    titulo: "Tu forma de resolver problemas",
+                    texto: "Una puerta está cerrada y no encontrás la llave.",
+                    opciones: [
+                        {valor: '{"curiosidad": 2, "inteligencia": 1}', texto: "A. Busco alrededor. Seguro hay algún mecanismo oculto."},
+                        {valor: '{"poder": 2, "coraje": 1}', texto: "B. Intento abrirla por la fuerza."},
+                        {valor: '{"inteligencia": 2, "astucia": 1}', texto: "C. Pienso en qué otra forma podría pasar."},
+                        {valor: '{"sabiduria": 2, "curiosidad": 1}', texto: "D. Exploro el resto a ver si descubro otra cosa."}
+                    ]
+                },
+                {
+                    titulo: "El poder de la Trifuerza",
+                    texto: "Frente tuyo aparece la Trifuerza. ¿Qué deseo pedirías?",
+                    opciones: [
+                        {valor: '{"coraje": 3, "empatia": 1}', texto: "A. Lo necesario para poder defender a quienes quiero."},
+                        {valor: '{"sabiduria": 3, "inteligencia": 1}', texto: "B. Conocimiento infinito para comprender al mundo."},
+                        {valor: '{"poder": 2, "coraje": 1}', texto: "C. Moldear al mundo a mi semejanza."},
+                        {valor: '{"curiosidad": 1, "poder": 1, "coraje": 1, "sabiduria": 1}', texto: "D. No pediría nada. Prefiero forjar mi propio destino."}
+                    ]
+                },
+                {
+                    titulo: "Tu legado",
+                    texto: "¿Cómo te gustaría ser recordado?",
+                    opciones: [
+                        {valor: '{"coraje": 2, "empatia": 1}', texto: "A. Como alguien que siempre estuvo ahí para los demás."},
+                        {valor: '{"sabiduria": 2, "inteligencia": 1}', texto: "B. Como alguien que descubrió lugares nunca antes vistos."},
+                        {valor: '{"poder": 2, "astucia": 1}', texto: "C. Como alguien que consiguió cambiar al mundo."},
+                        {valor: '{"empatia": 2, "coraje": 1}', texto: "D. Como un héroe."},
+                        {valor: '{"astucia": 2, "curiosidad": 1}', texto: "E. No me gustaría ser recordado."}
+                    ]
+                }
+            ],
+            atributos: {
+                coraje: 0,
+                sabiduria: 0,
+                poder: 0,
+                inteligencia: 0,
+                curiosidad: 0,
+                empatia: 0,
+                astucia: 0
+            }
+        }
+    },
+    template: `
+        <div>
+            <h2>¿Qué destino te depara?</h2>
+            <p>Las decisiones que tomes determinarán qué clase de aventurero serías, a qué pueblo pertenecerías y qué fragmento de la Trifuerza resonaría contigo.</p>
+            <form class="row g-3" action="#" method="post" enctype="multipart/form-data" @submit.prevent="calcularResultado">
+                <div class="col-12">
+						<label class="form-label" for="inputNombre">¿Cómo te gustaría que te llamen?</label>
+						<input class="form-control" type="text" id="inputNombre" name="nombre" required v-model="nombre">
+                </div>
+                <span>{{nombre}}</span>
+                <span>{{respuestas}}</span>
+                <div class="col-md-6" v-for="(pregunta, index) in preguntas" :key="index">
+                    <h3>{{pregunta.titulo}}</h3>
+                    <label :for="'inputPregunta' + index">{{pregunta.texto}}</label>
+                    <select class="form-select" :id="'inputPregunta' + index" requiered v-model="respuestas[index]">
+                        <option selected disabled value="">Elige...</option>
+                        <option v-for="(opcion, index2) in pregunta.opciones" :value="opcion.valor" :key="index2">{{opcion.texto}}</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Ver resultados</button>
+            </form>
+        </div>
+    `,
+    methods: {
+        calcularResultado() {
+            for (respuesta of this.respuestas) {
+                if (!respuesta) continue;
+                const resultado = JSON.parse(respuesta);
+                this.sumarAtributos(resultado);
+            }
+            //const resultados = JSON.parse(this.respuestas[0]);
+            //this.sumarAtributos(prueba);
+
+            this.imprimirAtributos();
+        },
+
+        sumarAtributos(atributos) {
+            for (const [clave, valor] of Object.entries(atributos)) {
+                if (clave in this.atributos) {
+                    this.atributos[clave] += valor;
+                }
+                else {
+                    alert("algo ta mal pibe");
+                }
+            }
+        },
+
+        imprimirAtributos() {
+            for (const [clave, valor] of Object.entries(this.atributos)) {
+                console.log(`${clave}: ${valor}`);
+            }
+            console.log("\n\n");
         }
     }
 });
