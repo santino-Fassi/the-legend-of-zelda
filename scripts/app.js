@@ -1,8 +1,17 @@
 const app = Vue.createApp({
     data() {
         return {
-            mensaje: "Aprendiendo Vue",
-            visible: true,
+            producto: {
+                tamanio: "27 GB",
+                modos: ["Modo TV", "Modo Semiportátil", "Modo Portátil"],
+                jugadores: 1,
+                online: "Guardado de datos en la nube",
+                consolas: ["Nintendo Switch 2"],
+                editor: "Nintendo",
+                idiomas: ["Japonés", "Inglés (británico)", "Francés", "Alemán", "Italiano", "Español", "Coreano", "Holandés", "Ruso", "Chino (simplificado)", "Español (América Latina)", "Francés (Canadá)", "Portugués (Brasil)", "Chino (tradicional)", "Ingles (EE.UU.)", "Polaco"],
+                lanzamiento: "5 de noviembre de 2026",
+                clasificacion: "Everyone 10+"
+            }
         }
     },
     methods: {
@@ -220,58 +229,60 @@ app.component("mejoras", {
 app.component("caracteristicas", {
     data() {
         return {
-            tamanio: "27 GB",
-            modos: ["Modo TV", "Modo Semiportátil", "Modo Portátil"],
-            jugadores: 1,
-            online: "Guardado de datos en la nube",
-            consolas: ["Nintendo Switch 2"],
-            editor: "Nintendo",
-            idiomas: ["Japonés", "Inglés (británico)", "Francés", "Alemán", "Italiano", "Español", "Coreano", "Holandés", "Ruso", "Chino (simplificado)", "Español (América Latina)", "Francés (Canadá)", "Portugués (Brasil)", "Chino (tradicional)", "Ingles (EE.UU.)", "Polaco"],
-            lanzamiento: "5 de noviembre de 2026",
-            clasificacion: "Everyone 10+"
+
         }
     },
+    props: ['tamanio', 'modos', 'jugadores', 'online', 'consolas', 'editor', 'idiomas', 'lanzamiento', 'clasificacion'],
     template: `
+
     <div>
-        <h2>Acerca de este producto</h2>
-        <ul>
-            <li>
+        <ul class="lista-datos">
+            <li class="card-dato">
                 <h3>Tamaño del archivo (estimado)</h3>
                 <p>{{tamanio}}</p>
             </li>
-            <li>
+
+            <li class="card-dato">
                 <h3>Modos de juego compatibles</h3>
+
                 <ul>
                     <li v-for="modo in modos" :key="modo">
                     {{modo}}
                     </li>
                 </ul>
             </li>
-            <li>
+
+            <li class="card-dato">
                 <h3>Número de jugadores</h3>
                 <p>{{jugadores}}</p>
             </li>
-            <li>
+
+            <li class="card-dato">
                 <h3>Nintendo Switch Online</h3>
                 <p>{{online}}</p>
             </li>
-            <li>
+
+            <li class="card-dato">
                 <h3>Consolas</h3>
                 <p>{{consolas.join(", ")}}</p>
             </li>
-            <li>
+
+            <li class="card-dato">
                 <h3>Editor</h3>
                 <p>{{editor}}</p>
             </li>
-            <li>
+
+            <li class="card-dato">
                 <h3>Idiomas compatibles</h3>
                 <p>{{idiomas.join(", ")}}</p>
             </li>
-            <li>
+
+            <li class="card-dato">
                 <h3>Fecha de lanzamiento</h3>
                 <p>{{lanzamiento}}</p>
             </li>
-            <li>
+
+            <li class="card-dato">
                 <h3>Clasificación ESRB</h3>
                 <p>{{clasificacion}}</p>
             </li>
@@ -391,7 +402,6 @@ app.component("piedra", {
 app.component("quiz-personalidad", {
     data() {
         return {
-            nombre: "",
             respuestas: [],
             preguntas: [
                 {
@@ -507,24 +517,35 @@ app.component("quiz-personalidad", {
                 curiosidad: 0,
                 empatia: 0,
                 astucia: 0
+            },
+            porcentajes: {},
+            haciendoFormulario: true,
+            perfil: {
+                nombre: "",
+                personalidad: null,
+                raza: null,
+                trifuerza: null
             }
         }
     },
+
+    mounted() {
+        this.cargarPerfil();
+    },
+
     template: `
-        <div>
-            <h2>¿Qué destino te depara?</h2>
+        <div v-if="haciendoFormulario == true">
+            <h2 class="h1">¿Qué destino te depara?</h2>
             <p>Las decisiones que tomes determinarán qué clase de aventurero serías, a qué pueblo pertenecerías y qué fragmento de la Trifuerza resonaría contigo.</p>
             <form class="row g-3" action="#" method="post" enctype="multipart/form-data" @submit.prevent="calcularResultado">
                 <div class="col-12">
 						<label class="form-label" for="inputNombre">¿Cómo te gustaría que te llamen?</label>
-						<input class="form-control" type="text" id="inputNombre" name="nombre" required v-model="nombre">
+						<input class="form-control" type="text" id="inputNombre" name="nombre" required v-model.trim.lazy="perfil.nombre">
                 </div>
-                <span>{{nombre}}</span>
-                <span>{{respuestas}}</span>
-                <div class="col-md-6" v-for="(pregunta, index) in preguntas" :key="index">
+                <div class="col-md-6 d-flex flex-column" v-for="(pregunta, index) in preguntas" :key="index">
                     <h3>{{pregunta.titulo}}</h3>
-                    <label :for="'inputPregunta' + index">{{pregunta.texto}}</label>
-                    <select class="form-select" :id="'inputPregunta' + index" requiered v-model="respuestas[index]">
+                    <label :for="'inputPregunta' + index" class="form-label mb-2">{{pregunta.texto}}</label>
+                    <select class="form-select mt-auto" :id="'inputPregunta' + index" required v-model="respuestas[index]">
                         <option selected disabled value="">Elige...</option>
                         <option v-for="(opcion, index2) in pregunta.opciones" :value="opcion.valor" :key="index2">{{opcion.texto}}</option>
                     </select>
@@ -533,18 +554,81 @@ app.component("quiz-personalidad", {
                 <button type="submit" class="btn btn-primary">Ver resultados</button>
             </form>
         </div>
+
+        <div v-else>
+            <h2 class="h1">Tu Perfil</h2>
+            <p class="h2">{{perfil.nombre}}</p>
+
+            <section class="personalidad">
+                <h3 class="fw-bold">Tu Personalidad</h3>
+                <h4>{{perfil.personalidad.simbolo}}{{perfil.personalidad.nombre}}</h4>
+                <h5 class="fst-italic border-bottom">{{perfil.personalidad.subtitulo}}</h5>
+                <p>{{perfil.personalidad.descripcion}}</p>
+            </section>
+
+            <section class="raza">
+                <h3 class="fw-bold">Tu Raza</h3>
+                <h4>{{perfil.raza.simbolo}}{{perfil.raza.nombre}}</h4>
+                <h5 class="fst-italic border-bottom">{{perfil.raza.subtitulo}}</h5>
+                <p>{{perfil.raza.descripcion}}</p>
+            </section>
+
+            <section class="trifuerza">
+                <h3 class="fw-bold">Tu Trifuerza</h3>
+                <h4>{{perfil.trifuerza.simbolo}}{{perfil.trifuerza.nombre}}</h4>
+                <h5 class="fst-italic border-bottom">{{perfil.trifuerza.subtitulo}}</h5>
+                <p>{{perfil.trifuerza.descripcion}}</p>
+            </section>
+
+            <section class="resultados">
+                <h3>Tus Resultados</h3>
+                <ul>
+                    <li v-for="(porcentaje, index) in Object.entries(porcentajes)" :key="index">
+                        <h4>{{nombreAtributos(porcentaje[0])}}</h4>
+                        <div class="progress dark-bar" role="progressbar" :aria-label="'Porcentaje de atributo' + nombreAtributos(porcentaje[0])" :aria-valuenow="porcentaje[1]" aria-valuemax="100">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated" :style="'width: ' + porcentaje[1] + '%'" :class="porcentaje[0]"></div>
+                        </div>
+                    </li>
+                </ul>
+            </section>
+
+            <button type="button" class="btn btn-primary" @click="reiniciarQuiz()">Hacer el cuestionario de nuevo</button>
+        </div>
     `,
     methods: {
+        nombreAtributos(atributo) {
+            const nombres = {
+                coraje: "Coraje",
+                sabiduria: "Sabiduría",
+                poder: "Poder",
+                inteligencia: "Inteligencia",
+                curiosidad: "Curiosidad",
+                empatia: "Empatía",
+                astucia: "Astucia"
+            };
+
+            return nombres[atributo] || atributo;
+        },
+
         calcularResultado() {
-            for (respuesta of this.respuestas) {
+            this.reiniciarAtributos();
+
+            for (const respuesta of this.respuestas) {
                 if (!respuesta) continue;
                 const resultado = JSON.parse(respuesta);
                 this.sumarAtributos(resultado);
             }
-            //const resultados = JSON.parse(this.respuestas[0]);
-            //this.sumarAtributos(prueba);
+
+            this.normalizarAtributos();
+            this.perfil.personalidad = this.determinarPersonalidad();
+            this.perfil.raza = this.determinarRaza();
+            this.perfil.trifuerza = this.determinarTrifuerza();
+
+            this.haciendoFormulario = false;
 
             this.imprimirAtributos();
+
+            this.guardarPerfil();
         },
 
         sumarAtributos(atributos) {
@@ -563,6 +647,306 @@ app.component("quiz-personalidad", {
                 console.log(`${clave}: ${valor}`);
             }
             console.log("\n\n");
+        },
+
+        guardarPerfil() {
+            const str_perfil = JSON.stringify(this.perfil);
+            localStorage.setItem("perfil", str_perfil);
+
+            const str_atributos = JSON.stringify(this.atributos);
+            localStorage.setItem("atributos", str_atributos);
+
+            const str_porcentajes = JSON.stringify(this.porcentajes);
+            localStorage.setItem("porcentajes", str_porcentajes);
+
+        },
+
+        cargarPerfil() {
+            if (localStorage.getItem("perfil")) {
+                this.perfil = JSON.parse(localStorage.getItem("perfil"));
+            }
+            if (localStorage.getItem("atributos")) {
+                this.atributos = JSON.parse(localStorage.getItem("atributos"));
+            }
+            if (localStorage.getItem("porcentajes")) {
+                this.porcentajes = JSON.parse(localStorage.getItem("porcentajes"));
+            }
+            if (this.perfil.nombre != "") {
+                this.haciendoFormulario = false;
+            }
+            
+
+        },
+
+        obtenerPosiblesAtributosMaximos() {
+            const maximos = {};
+
+            for (const clave in this.atributos) {
+                maximos[clave] = 0;
+            }
+
+            for (const pregunta of this.preguntas) {
+
+                const maximoPregunta = {};
+
+                for (const opcion of pregunta.opciones) {
+                    const valores = JSON.parse(opcion.valor);
+
+                    for (const clave in valores) {
+                        maximoPregunta[clave] = Math.max(maximoPregunta[clave] || 0, valores[clave]);
+                    }
+                }
+
+                for (const clave in maximos) {
+                    maximos[clave] += maximoPregunta[clave] || 0;
+                }
+            }
+
+            return maximos;
+        },
+
+        normalizarAtributos() {
+            const maximos = this.obtenerPosiblesAtributosMaximos();
+
+            for (const clave in this.atributos) {
+                const maximo = maximos[clave];
+
+                this.porcentajes[clave] = Math.min(100, Math.round((this.atributos[clave] / maximo) * 100));
+            }
+        },
+
+        calcularAfinidad(combinacion) {
+            return combinacion.reduce((total, [atributo, peso]) => {
+                return total + this.porcentajes[atributo] * peso;
+            }, 0);
+        },
+
+        determinarPersonalidad() {
+            const virtudes = [
+                this.porcentajes.coraje,
+                this.porcentajes.sabiduria,
+                this.porcentajes.poder
+            ];
+
+            const maxVirtud = Math.max(...virtudes);
+            const minVirtud = Math.min(...virtudes);
+
+            if (maxVirtud - minVirtud <= 10 && maxVirtud >= 60) {
+                return {
+                    nombre: "El Héroe",
+                    subtitulo: "El equilibrio entre las tres virtudes",
+                    simbolo: "⭐",
+                    descripcion: "No hay una sola virtud que defina tu camino. Coraje, Sabiduría y Poder conviven en equilibrio, y tu fortaleza nace de saber cuándo utilizar cada una."
+                };
+            }
+
+            const personalidades = [
+                {
+                    nombre: "El Explorador",
+                    subtitulo: "Nada permanece desconocido por mucho tiempo",
+                    simbolo: "🌿",
+                    descripcion: "La curiosidad te lleva más lejos que cualquier mapa. Preferís descubrir secretos, recorrer caminos desconocidos y encontrar cosas que otros pasaron por alto.",
+                    afinidad: this.calcularAfinidad([
+                        ["curiosidad", 0.6],
+                        ["inteligencia", 0.4]
+                    ])
+                },
+                {
+                    nombre: "El Guerrero",
+                    subtitulo: "El peligro es un desafío, no un obstáculo",
+                    simbolo: "⚔️",
+                    descripcion: "No dudás cuando llega el momento de actuar. Te atraen los desafíos y confías en tu determinación para superar aquello que se interponga en tu camino.",
+                    afinidad: this.calcularAfinidad([
+                        ["coraje", 0.6],
+                        ["poder", 0.4]
+                    ])
+                },
+                {
+                    nombre: "El Estratega",
+                    subtitulo: "La mente también puede ser un arma",
+                    simbolo: "🧠",
+                    descripcion: "Preferís comprender antes de actuar. Observás, analizás y buscás una solución inteligente antes de entrar en combate o tomar una decisión difícil.",
+                    afinidad: this.calcularAfinidad([
+                        ["inteligencia", 0.6],
+                        ["astucia", 0.4]
+                    ])
+                },
+                {
+                    nombre: "El Sabio",
+                    subtitulo: "Comprender es la primera forma de vencer",
+                    simbolo: "🔮",
+                    descripcion: "Tu paciencia y sensibilidad te llevan a buscar respuestas antes de actuar. Te importa tanto entender el mundo como entender a quienes te rodean.",
+                    afinidad: this.calcularAfinidad([
+                        ["sabiduria", 0.6],
+                        ["empatia", 0.4]
+                    ])
+                },
+                {
+                    nombre: "El Pícaro",
+                    subtitulo: "Siempre existe otro camino",
+                    simbolo: "🦊",
+                    descripcion: "Sos adaptable y difícil de predecir. Cuando aparece un problema, preferís usar el ingenio, improvisar y encontrar una solución que nadie más había considerado.",
+                    afinidad: this.calcularAfinidad([
+                        ["astucia", 0.6],
+                        ["curiosidad", 0.4]
+                    ])
+                },
+                {
+                    nombre: "El Guardián",
+                    subtitulo: "Tu mayor fuerza es proteger a los demás",
+                    simbolo: "🛡️",
+                    descripcion: "Las personas que te importan ocupan un lugar central en tus decisiones. Tenés el valor necesario para ponerte en peligro cuando alguien necesita tu ayuda.",
+                    afinidad: this.calcularAfinidad([
+                        ["empatia", 0.6],
+                        ["coraje", 0.4]
+                    ])
+                },
+                {
+                    nombre: "El Conquistador",
+                    subtitulo: "El destino está ahí para ser cambiado",
+                    simbolo: "👑",
+                    descripcion: "Tenés una voluntad fuerte y una gran determinación. Cuando querés alcanzar algo, utilizás todos los recursos disponibles para convertir tu objetivo en realidad.",
+                    afinidad: this.calcularAfinidad([
+                        ["poder", 0.6],
+                        ["astucia", 0.4]
+                    ])
+                }
+
+            ];
+
+            return personalidades.sort((a, b) => b.afinidad - a.afinidad)[0];
+        },
+
+        determinarRaza() {
+            const razas = [
+                {
+                    nombre: "Kokiri",
+                    subtitulo: "Hijos del bosque",
+                    simbolo: "🌳",
+                    descripcion: "Tu curiosidad y tu conexión con los demás te harían sentir como en casa bajo la protección del Gran Árbol Deku.",
+                    afinidad: this.calcularAfinidad([
+                        ["curiosidad", 0.45],
+                        ["empatia", 0.35],
+                        ["sabiduria", 0.2]
+                    ])
+                },
+                {
+                    nombre: "Goron",
+                    subtitulo: "Espíritus de la montaña",
+                    simbolo: "🔥",
+                    descripcion: "Directo, resistente y decidido. Los desafíos difíciles no te intimidan y preferís enfrentarlos de frente.",
+                    afinidad: this.calcularAfinidad([
+                        ["coraje", 0.45],
+                        ["poder", 0.35],
+                        ["empatia", 0.2]
+                    ])
+                },
+                {
+                    nombre: "Zora",
+                    subtitulo: "Guardianes de las aguas",
+                    simbolo: "💧",
+                    descripcion: "Tu paciencia y sensibilidad encajan con los Zora. Observás antes de actuar y valorás el conocimiento.",
+                    afinidad: this.calcularAfinidad([
+                        ["sabiduria", 0.45],
+                        ["empatia", 0.35],
+                        ["inteligencia", 0.2]
+                    ])
+                },
+                {
+                    nombre: "Gerudo",
+                    subtitulo: "Guerreras del desierto",
+                    simbolo: "🏜️",
+                    descripcion: "Independiente y decidido, no necesitás seguir el camino marcado. Tu astucia y ambición te permiten adaptarte incluso a las situaciones más difíciles.",
+                    afinidad: this.calcularAfinidad([
+                        ["astucia", 0.45],
+                        ["poder", 0.35],
+                        ["curiosidad", 0.2]
+                    ])
+                },
+                {
+                    nombre: "Sheikah",
+                    subtitulo: "Servidores de la oscuridad",
+                    simbolo: "👁️",
+                    descripcion: "Tu forma de observar, analizar y buscar respuestas te convertiría en un guardían natural de los secretos de Hyrule.",
+                    afinidad: this.calcularAfinidad([
+                        ["sabiduria", 0.4],
+                        ["inteligencia", 0.35],
+                        ["astucia", 0.25]
+                    ])
+                },
+                {
+                    nombre: "Hyliano",
+                    subtitulo: "Habitantes del reino",
+                    simbolo: "🏰",
+                    descripcion: "Tu personalidad combina distintas virtudes. Sos adaptable y podés desenvolverte tanto frente al peligro como en situaciones que requieren reflexión.",
+                    afinidad: this.calcularAfinidad([
+                        ["coraje", 0.35],
+                        ["sabiduria", 0.35],
+                        ["inteligencia", 0.3]
+                    ])
+                }
+            ];
+
+            return razas.sort((a, b) => b.afinidad - a.afinidad)[0];
+        },
+
+        determinarTrifuerza() {
+            const virtudes = [
+                {
+                    atributo: "coraje",
+                    nombre: "Trifuerza del Coraje",
+                    subtitulo: "El valor para avanzar",
+                    simbolo: "💚",
+                    descripcion: "Tu mayor virtud es el Coraje. No significa que nunca tengas miedo, sino que estás dispuesto a avanzar incluso cuando el camino resulta peligroso."
+                },
+                {
+                    atributo: "sabiduria",
+                    nombre: "Trifuerza de la Sabiduría",
+                    subtitulo: "El conocimiento para entender",
+                    simbolo: "💙",
+                    descripcion: "Tu mayor virtud es la Sabiduría. Preferís comprender una situación antes de actuar y encontrar respuestas donde otros solo ven obstáculos."
+                },
+                {
+                    atributo: "poder",
+                    nombre: "Trifuerza del Poder",
+                    subtitulo: "La voluntad para cambiar el destino",
+                    simbolo: "💗",
+                    descripcion: "Tu mayor virtud es el Poder. Tenés una voluntad firme y la determinación necesaria para perseguir aquello que te proponés."
+                }
+            ];
+
+            if (this.porcentajes["coraje"] == this.porcentajes["sabiduria"] && this.porcentajes["poder"] == this.porcentajes["sabiduria"]) {
+                return {
+                    atributo: "La Trifuerza Reunida",
+                    nombre: "La Trifuerza Reunida",
+                    subtitulo: "El equilibrio de un alma pura",
+                    simbolo: "💛",
+                    descripcion: "Tus virtudes están perfectamente equilibradas. Eres una persona digna de obtener la Trifuerza completa, y así, traer a Hyrule una nueva era."
+                }
+            }
+
+            return virtudes.sort((a, b) => this.porcentajes[b.atributo] - this.porcentajes[a.atributo])[0];
+        },
+
+        reiniciarAtributos() {
+            for (const clave in this.atributos) {
+                this.atributos[clave] = 0;
+                this.porcentajes[clave] = 0;
+            }
+        },
+
+        reiniciarQuiz() {
+            this.respuestas = [];
+            this.reiniciarAtributos();
+            this.haciendoFormulario = true;
+            this.perfil = {
+                nombre: "",
+                personalidad: null,
+                raza: null,
+                trifuerza: null
+            };
+
+            localStorage.clear();
         }
     }
 });
