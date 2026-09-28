@@ -102,7 +102,7 @@ app.component("historia", {
         <h3>Una terrible visión</h3>
         <div class="contenedor-contenido">
             <p>
-                Años después de la terrible guerra de Hyrule, <em>Link tuvo una extraña pesadilla cuya gravedad aún no era capaz de comprender.<em><br>
+                Años después de la terrible guerra de Hyrule, <em>Link tuvo una extraña pesadilla cuya gravedad aún no era capaz de comprender.</em><br>
                 Una mujer con ropajes de guerrera huía a caballo junto a una niña, perseguidas desde el castillo por un oscuro jinete. Cuando el jinete las perdió de vista, reparó en Link y lo observó con una sonrisa temible, justo antes de que despertara.<br>
                 Link aún no sabía quiénes eran aquellas personas ni qué significaba aquel sueño. Solo sabía que algo estaba a punto de comenzar. Ya que, al despertar, descubrió que por fin había recibido a su hada.<br>
                 Navi, la pequeña hada enviada para ser la compañera de Link, le explica que el Árbol Deku lo necesita.
@@ -149,7 +149,7 @@ app.component("mejoras", {
                     titulo: "Cinemáticas reimaginadas y con doblajes de voz",
                     texto: "Las cinemáticas cuentan con actuaciones de voz y los personajes reciben nuevos diálogos, aportando otra dimensión a momentos que los fans recuerdan desde hace años.",
                     img: "imgs/mejoras/darunia.webp",
-                    alt: ""
+                    alt: "Link y Darunia forjando una hermandad"
                 },
                 {
                     id: 5,
@@ -346,7 +346,7 @@ app.component("piedra", {
     },
     template: `
         <div>
-            <a tabindex="0" class="btn" type="button" data-bs-custom-class="pop-overs" data-bs-trigger="focus" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="left" :data-bs-content="this.mensaje()" @click="rebotar()">
+            <a tabindex="0" class="btn" type="button" data-bs-custom-class="pop-overs" data-bs-trigger="focus" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="left" :data-bs-content="mensaje()" @click="rebotar()">
                 <img class="piedra-chismosa" :class="{'rebotar': rebotando}" @animationend="finRebote" src="imgs/gossip-stone.webp" alt="Piedra Chismosa">
             </a>
         </div>
@@ -628,7 +628,7 @@ app.component("quiz-personalidad", {
                     this.atributos[clave] += valor;
                 }
                 else {
-                    alert("algo ta mal pibe");
+                    console.warn("No deberías ver esto. Algo salió mal!");
                 }
             }
         },
@@ -728,7 +728,7 @@ app.component("quiz-personalidad", {
             const maxVirtud = Math.max(...virtudes);
             const minVirtud = Math.min(...virtudes);
 
-            if (maxVirtud - minVirtud <= 10 && maxVirtud >= 60) {
+            if (maxVirtud - minVirtud <= 10 && maxVirtud >= 40) {
                 return {
                     nombre: "El Héroe",
                     subtitulo: "El equilibrio entre las tres virtudes",
@@ -912,7 +912,11 @@ app.component("quiz-personalidad", {
                 }
             ];
 
-            if (this.porcentajes["coraje"] == this.porcentajes["sabiduria"] && this.porcentajes["poder"] == this.porcentajes["sabiduria"]) {
+            const diffCS = Math.abs(this.porcentajes.coraje - this.porcentajes.sabiduria);
+            const diffSP = Math.abs(this.porcentajes.sabiduria - this.porcentajes.poder);
+            const diffCP = Math.abs(this.porcentajes.coraje - this.porcentajes.poder);
+
+            if (diffCS <= 5 && diffSP <= 5 && diffCP <= 5) {
                 return {
                     atributo: "La Trifuerza Reunida",
                     nombre: "La Trifuerza Reunida",
@@ -959,6 +963,4 @@ app.component("quiz-personalidad", {
 const viewModel = app.mount('#app');
 
 const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]');
-const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl), {
-    trigger: "focus"
-});
+const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl, {trigger: "focus"}));

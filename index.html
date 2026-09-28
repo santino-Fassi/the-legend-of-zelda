@@ -26,7 +26,7 @@
 			<h1 class="d-none">The Legend of Zelda - Ocarina of Time</h1>
 			<nav class="navbar navbar-expand-lg px-md-4" data-bs-theme="dark">
 				<div class="container-fluid">
-					<a class="navbar-brand" href="index.html"><img class="d-none d-lg-block logo d-inline-block logo"
+					<a class="navbar-brand" href="index.html"><img class="d-none d-lg-block logo d-inline-block"
 							src="imgs/logo.webp" alt="Logo de Zelda"><span
 							class=" d-lg-none h1 py-3 text-light">Nintendo</span></a>
 					<piedra class="order-lg-last ms-auto me-2 me-lg-0 ms-lg-3"></piedra>
@@ -93,14 +93,14 @@
 					<div class="producto-datos">
 						<h2>Acerca de este producto</h2>
 						<caracteristicas
-							:tamanio="producto.tamanio",
-							:modos="producto.modos",
-							:jugadores="producto.jugadores",
-							:online="producto.online",
-							:consolas="producto.consolas",
-							:editor="producto.editor",
-							:idiomas="producto.idiomas",
-							:lanzamiento="producto.lanzamiento",
+							:tamanio="producto.tamanio"
+							:modos="producto.modos"
+							:jugadores="producto.jugadores"
+							:online="producto.online"
+							:consolas="producto.consolas"
+							:editor="producto.editor"
+							:idiomas="producto.idiomas"
+							:lanzamiento="producto.lanzamiento"
 							:clasificacion="producto.clasificacion"
 						></caracteristicas>
 					</div>
@@ -128,8 +128,27 @@
 		</main>
 
 
-		<footer>
-
+		<footer class="py-2 mt-4 container-fluid rounded-bottom rounded-4">
+			<div class="row">
+				<div class="c_autor text-center col-12 col-md-6">
+					<img class="mb-3 border-2" src="imgs/fassi.webp"
+						alt="Fotografía de uno de los autores de esta página web, Santino Fassi">
+					<ul class="text-light">
+						<li>Nombre: Santino Fassi</li>
+						<li>Edad: 20 años</li>
+						<li><a class="btn btn-dark" href="mailto:santino.fassi@davinci.edu.ar">Contacto</a></li>
+					</ul>
+				</div>
+				<div class="c_autor text-center col-12 col-md-6 flex-md-row-reverse">
+					<img class="mb-3 border-2" src="imgs/gastager.webp"
+						alt="Fotografía de uno de los autores de esta página web, Camila Gastager">
+					<ul class="text-light">
+						<li>Nombre: Camila Gastager</li>
+						<li>Edad: 20 años</li>
+						<li><a class="btn btn-dark" href="mailto:camila.gastager@davinci.edu.ar">Contacto</a></li>
+					</ul>
+				</div>
+			</div>
 		</footer>
 
 	</div>
