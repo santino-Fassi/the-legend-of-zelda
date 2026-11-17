@@ -68,6 +68,11 @@ export default {
       ],
     }
   },
+  computed: {
+    tarjetasSecundarias() {
+      return this.tarjetas.slice(1)
+    },
+  },
 }
 </script>
 
@@ -214,7 +219,7 @@ export default {
             </div>
 
             <div
-              v-for="tarjeta in tarjetas.slice(1)"
+              v-for="tarjeta in tarjetasSecundarias"
               :key="tarjeta.id"
               class="col-12 col-md-6 col-lg-4"
             >

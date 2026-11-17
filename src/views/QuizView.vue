@@ -6,7 +6,9 @@ export default {
   data() {
     return {
       castilloImg,
+      nombre: '',
       respuestas: [],
+      haciendoFormulario: true,
       preguntas: [
         {
           titulo: 'El camino desconocido',
@@ -228,7 +230,11 @@ export default {
           ],
         },
       ],
-      atributos: {
+    }
+  },
+  computed: {
+    atributos() {
+      const suma = {
         coraje: 0,
         sabiduria: 0,
         poder: 0,
@@ -236,104 +242,30 @@ export default {
         curiosidad: 0,
         empatia: 0,
         astucia: 0,
-      },
-      porcentajes: {},
-      haciendoFormulario: true,
-      perfil: {
-        nombre: '',
-        personalidad: null,
-        raza: null,
-        trifuerza: null,
-      },
-    }
-  },
-  mounted() {
-    this.cargarPerfil()
-  },
-  methods: {
-    nombreAtributos(atributo) {
-      const nombres = {
-        coraje: 'Coraje',
-        sabiduria: 'Sabiduría',
-        poder: 'Poder',
-        inteligencia: 'Inteligencia',
-        curiosidad: 'Curiosidad',
-        empatia: 'Empatía',
-        astucia: 'Astucia',
       }
-
-      return nombres[atributo] || atributo
-    },
-    calcularResultado() {
-      this.reiniciarAtributos()
 
       for (const respuesta of this.respuestas) {
         if (!respuesta) continue
         const resultado = JSON.parse(respuesta)
-        this.sumarAtributos(resultado)
-      }
-
-      this.normalizarAtributos()
-      this.perfil.personalidad = this.determinarPersonalidad()
-      this.perfil.raza = this.determinarRaza()
-      this.perfil.trifuerza = this.determinarTrifuerza()
-
-      this.haciendoFormulario = false
-
-      this.imprimirAtributos()
-
-      this.guardarPerfil()
-    },
-    sumarAtributos(atributos) {
-      for (const [clave, valor] of Object.entries(atributos)) {
-        if (clave in this.atributos) {
-          this.atributos[clave] += valor
-        } else {
-          console.warn('No deberías ver esto. Algo salió mal!')
+        for (const [clave, valor] of Object.entries(resultado)) {
+          if (clave in suma) {
+            suma[clave] += valor
+          }
         }
       }
-    },
-    imprimirAtributos() {
-      for (const [clave, valor] of Object.entries(this.atributos)) {
-        console.log(`${clave}: ${valor}`)
-      }
-      console.log('\n\n')
-    },
-    guardarPerfil() {
-      const strPerfil = JSON.stringify(this.perfil)
-      localStorage.setItem('perfil', strPerfil)
 
-      const strAtributos = JSON.stringify(this.atributos)
-      localStorage.setItem('atributos', strAtributos)
-
-      const strPorcentajes = JSON.stringify(this.porcentajes)
-      localStorage.setItem('porcentajes', strPorcentajes)
-
-      const strRespuestas = JSON.stringify(this.respuestas)
-      localStorage.setItem('respuestas', strRespuestas)
+      return suma
     },
-    cargarPerfil() {
-      if (localStorage.getItem('perfil')) {
-        this.perfil = JSON.parse(localStorage.getItem('perfil'))
-      }
-      if (localStorage.getItem('atributos')) {
-        this.atributos = JSON.parse(localStorage.getItem('atributos'))
-      }
-      if (localStorage.getItem('porcentajes')) {
-        this.porcentajes = JSON.parse(localStorage.getItem('porcentajes'))
-      }
-      if (localStorage.getItem('respuestas')) {
-        this.respuestas = JSON.parse(localStorage.getItem('respuestas'))
-      }
-      if (this.perfil.nombre !== '') {
-        this.haciendoFormulario = false
-      }
-    },
-    obtenerPosiblesAtributosMaximos() {
-      const maximos = {}
 
-      for (const clave in this.atributos) {
-        maximos[clave] = 0
+    posiblesAtributosMaximos() {
+      const maximos = {
+        coraje: 0,
+        sabiduria: 0,
+        poder: 0,
+        inteligencia: 0,
+        curiosidad: 0,
+        empatia: 0,
+        astucia: 0,
       }
 
       for (const pregunta of this.preguntas) {
@@ -354,21 +286,22 @@ export default {
 
       return maximos
     },
-    normalizarAtributos() {
-      const maximos = this.obtenerPosiblesAtributosMaximos()
+
+    porcentajes() {
+      const resultado = {}
+      const maximos = this.posiblesAtributosMaximos
 
       for (const clave in this.atributos) {
         const maximo = maximos[clave]
-
-        this.porcentajes[clave] = Math.min(100, Math.round((this.atributos[clave] / maximo) * 100))
+        resultado[clave] = maximo
+          ? Math.min(100, Math.round((this.atributos[clave] / maximo) * 100))
+          : 0
       }
+
+      return resultado
     },
-    calcularAfinidad(combinacion) {
-      return combinacion.reduce((total, [atributo, peso]) => {
-        return total + this.porcentajes[atributo] * peso
-      }, 0)
-    },
-    determinarPersonalidad() {
+
+    personalidad() {
       const virtudes = [this.porcentajes.coraje, this.porcentajes.sabiduria, this.porcentajes.poder]
 
       const maxVirtud = Math.max(...virtudes)
@@ -466,7 +399,8 @@ export default {
 
       return personalidades.sort((a, b) => b.afinidad - a.afinidad)[0]
     },
-    determinarRaza() {
+
+    raza() {
       const razas = [
         {
           nombre: 'Kokiri',
@@ -544,7 +478,8 @@ export default {
 
       return razas.sort((a, b) => b.afinidad - a.afinidad)[0]
     },
-    determinarTrifuerza() {
+
+    trifuerza() {
       const virtudes = [
         {
           atributo: 'coraje',
@@ -589,30 +524,75 @@ export default {
 
       return virtudes.sort((a, b) => this.porcentajes[b.atributo] - this.porcentajes[a.atributo])[0]
     },
-    obtenerTextoRespuesta(indice) {
-      const valorSeleccionado = this.respuestas[indice]
-      const pregunta = this.preguntas[indice]
-      const opcion = pregunta.opciones.find((item) => item.valor === valorSeleccionado)
 
-      return opcion ? opcion.texto : ''
+    resumenRespuestas() {
+      return this.preguntas.map((pregunta, index) => {
+        const valorElegido = this.respuestas[index]
+        const opcionElegida = pregunta.opciones.find((opcion) => opcion.valor === valorElegido)
+
+        return {
+          titulo: pregunta.titulo,
+          texto: pregunta.texto,
+          respuestaTexto: opcionElegida ? opcionElegida.texto : 'Sin responder',
+        }
+      })
     },
-    reiniciarAtributos() {
-      for (const clave in this.atributos) {
-        this.atributos[clave] = 0
-        this.porcentajes[clave] = 0
+  },
+  mounted() {
+    this.cargarPerfil()
+  },
+  methods: {
+    nombreAtributos(atributo) {
+      const nombres = {
+        coraje: 'Coraje',
+        sabiduria: 'Sabiduría',
+        poder: 'Poder',
+        inteligencia: 'Inteligencia',
+        curiosidad: 'Curiosidad',
+        empatia: 'Empatía',
+        astucia: 'Astucia',
+      }
+
+      return nombres[atributo] || atributo
+    },
+    calcularAfinidad(combinacion) {
+      return combinacion.reduce((total, [atributo, peso]) => {
+        return total + this.porcentajes[atributo] * peso
+      }, 0)
+    },
+    calcularResultado() {
+      this.haciendoFormulario = false
+      this.imprimirAtributos()
+      this.guardarPerfil()
+    },
+    imprimirAtributos() {
+      for (const [clave, valor] of Object.entries(this.atributos)) {
+        console.log(`${clave}: ${valor}`)
+      }
+      console.log('\n\n')
+    },
+    guardarPerfil() {
+      localStorage.setItem('nombre', this.nombre)
+      localStorage.setItem('respuestas', JSON.stringify(this.respuestas))
+    },
+    cargarPerfil() {
+      const nombreGuardado = localStorage.getItem('nombre')
+      const respuestasGuardadas = localStorage.getItem('respuestas')
+
+      if (nombreGuardado) {
+        this.nombre = nombreGuardado
+      }
+      if (respuestasGuardadas) {
+        this.respuestas = JSON.parse(respuestasGuardadas)
+      }
+      if (this.nombre !== '' && this.respuestas.length > 0) {
+        this.haciendoFormulario = false
       }
     },
     reiniciarQuiz() {
+      this.nombre = ''
       this.respuestas = []
-      this.reiniciarAtributos()
       this.haciendoFormulario = true
-      this.perfil = {
-        nombre: '',
-        personalidad: null,
-        raza: null,
-        trifuerza: null,
-      }
-
       localStorage.clear()
     },
   },
@@ -640,7 +620,7 @@ export default {
           <label class="form-label" for="inputNombre">¿Cómo te gustaría que te llamen?</label>
           <input
             id="inputNombre"
-            v-model.trim.lazy="perfil.nombre"
+            v-model.trim.lazy="nombre"
             class="form-control"
             type="text"
             name="nombre"
@@ -677,27 +657,27 @@ export default {
 
     <div v-else>
       <h2 class="h1">Tu Perfil</h2>
-      <p class="h2">{{ perfil.nombre }}</p>
+      <p class="h2">{{ nombre }}</p>
 
       <section class="personalidad">
         <h3 class="fw-bold">Tu Personalidad</h3>
-        <h4>{{ perfil.personalidad.simbolo }}{{ perfil.personalidad.nombre }}</h4>
-        <h5 class="fst-italic border-bottom">{{ perfil.personalidad.subtitulo }}</h5>
-        <p>{{ perfil.personalidad.descripcion }}</p>
+        <h4>{{ personalidad.simbolo }}{{ personalidad.nombre }}</h4>
+        <h5 class="fst-italic border-bottom">{{ personalidad.subtitulo }}</h5>
+        <p>{{ personalidad.descripcion }}</p>
       </section>
 
       <section class="raza">
         <h3 class="fw-bold">Tu Raza</h3>
-        <h4>{{ perfil.raza.simbolo }}{{ perfil.raza.nombre }}</h4>
-        <h5 class="fst-italic border-bottom">{{ perfil.raza.subtitulo }}</h5>
-        <p>{{ perfil.raza.descripcion }}</p>
+        <h4>{{ raza.simbolo }}{{ raza.nombre }}</h4>
+        <h5 class="fst-italic border-bottom">{{ raza.subtitulo }}</h5>
+        <p>{{ raza.descripcion }}</p>
       </section>
 
       <section class="trifuerza">
         <h3 class="fw-bold">Tu Trifuerza</h3>
-        <h4>{{ perfil.trifuerza.simbolo }}{{ perfil.trifuerza.nombre }}</h4>
-        <h5 class="fst-italic border-bottom">{{ perfil.trifuerza.subtitulo }}</h5>
-        <p>{{ perfil.trifuerza.descripcion }}</p>
+        <h4>{{ trifuerza.simbolo }}{{ trifuerza.nombre }}</h4>
+        <h5 class="fst-italic border-bottom">{{ trifuerza.subtitulo }}</h5>
+        <p>{{ trifuerza.descripcion }}</p>
       </section>
 
       <section class="resultados">
@@ -725,12 +705,12 @@ export default {
       <section class="respuestas">
         <h3>Tus Respuestas</h3>
         <ol>
-          <li v-for="(pregunta, index) in preguntas" :key="index">
-            <h4>{{ pregunta.titulo }}</h4>
-            <p>{{ pregunta.texto }}</p>
+          <li v-for="(item, index) in resumenRespuestas" :key="index">
+            <h4>{{ item.titulo }}</h4>
+            <p>{{ item.texto }}</p>
 
             <p>
-              <strong>{{ obtenerTextoRespuesta(index) }}</strong>
+              <strong>{{ item.respuestaTexto }}</strong>
             </p>
           </li>
         </ol>

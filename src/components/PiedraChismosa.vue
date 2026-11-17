@@ -12,6 +12,19 @@ export default {
       rebotando: false,
     }
   },
+  computed: {
+    diasRestantes() {
+      const diferencia = this.lanzamiento - this.hoy
+      return Math.ceil(diferencia / (1000 * 60 * 60 * 24))
+    },
+    mensaje() {
+      if (this.diasRestantes > 0) {
+        return `¡BOINNG! ¡BOINNG! ¡Faltan ${this.diasRestantes} días para el lanzamiento!`
+      } else {
+        return '¡BOINNG! ¡BOINNG! ¡El juego ya está disponible!'
+      }
+    },
+  },
   mounted() {
     this.inicializarPopover()
   },
@@ -26,20 +39,6 @@ export default {
     },
     finRebote() {
       this.rebotando = false
-    },
-    diasRestantes() {
-      const diferencia = this.lanzamiento - this.hoy
-      const dias = Math.ceil(diferencia / (1000 * 60 * 60 * 24))
-
-      return dias
-    },
-    mensaje() {
-      const dias = this.diasRestantes()
-      if (dias > 0) {
-        return `¡BOINNG! ¡BOINNG! ¡Faltan ${dias} días para el lanzamiento!`
-      } else {
-        return '¡BOINNG! ¡BOINNG! ¡El juego ya está disponible!'
-      }
     },
   },
 }
@@ -57,8 +56,8 @@ export default {
       data-bs-container="body"
       data-bs-toggle="popover"
       data-bs-placement="left"
-      :data-bs-content="mensaje()"
-      @click="rebotar()"
+      :data-bs-content="mensaje"
+      @click="rebotar"
     >
       <img
         class="piedra-chismosa"

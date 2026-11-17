@@ -1,5 +1,4 @@
 <script>
-import { RouterLink, RouterView } from 'vue-router'
 import PiedraChismosa from './components/PiedraChismosa.vue'
 import logoImg from '@/assets/imgs/logo.webp'
 import fassiImg from '@/assets/imgs/fassi.webp'
@@ -8,8 +7,6 @@ import gastagerImg from '@/assets/imgs/gastager.webp'
 export default {
   name: 'App',
   components: {
-    RouterLink,
-    RouterView,
     PiedraChismosa,
   },
   data() {
