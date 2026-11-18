@@ -13,7 +13,7 @@ import galeria7Img from '@/assets/imgs/galeria/galeria7.webp'
 export default {
   name: 'InicioView',
   components: {
-    CaracteristicasProducto,
+    CaracteristicasProducto
   },
   data() {
     return {
@@ -42,50 +42,50 @@ export default {
           'Portugués (Brasil)',
           'Chino (tradicional)',
           'Ingles (EE.UU.)',
-          'Polaco',
+          'Polaco'
         ],
         lanzamiento: '5 de noviembre de 2026',
-        clasificacion: 'Everyone 10+',
+        clasificacion: 'Everyone 10+'
       },
       imagenes: [
         {
           id: 1,
           img: galeria1Img,
-          alt: 'Link sacando la Espada Maestra de su pedestal',
+          alt: 'Link sacando la Espada Maestra de su pedestal'
         },
         {
           id: 2,
           img: galeria2Img,
-          alt: 'Despedida de Link y Saria en el bosque Kokiri',
+          alt: 'Despedida de Link y Saria en el bosque Kokiri'
         },
         {
           id: 3,
           img: galeria3Img,
-          alt: 'Link tocando la nana de Zelda',
+          alt: 'Link tocando la nana de Zelda'
         },
         {
           id: 4,
           img: galeria4Img,
-          alt: 'Zelda niña en el patio de la familia real',
+          alt: 'Zelda niña en el patio de la familia real'
         },
         {
           id: 5,
           img: galeria5Img,
-          alt: 'Ganondorf en su caballo apareciendose frente a Link',
+          alt: 'Ganondorf en su caballo apareciendose frente a Link'
         },
         {
           id: 6,
           img: galeria6Img,
-          alt: 'Link peleando contra Phantom Ganon',
+          alt: 'Link peleando contra Phantom Ganon'
         },
         {
           id: 7,
           img: galeria7Img,
-          alt: 'Link arriba de su yegua Epona',
-        },
-      ],
+          alt: 'Link arriba de su yegua Epona'
+        }
+      ]
     }
-  },
+  }
 }
 </script>
 

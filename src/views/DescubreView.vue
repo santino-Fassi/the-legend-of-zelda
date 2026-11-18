@@ -23,7 +23,7 @@ export default {
           texto:
             'El reino de Hyrule ha sido reconstruido con nuevos gráficos, texturas, iluminación y materiales. Lugares que reconocés al instante vuelven a la vida con mucho más detalle.',
           img: ocarinaImg,
-          alt: 'Ocarina del Tiempo junto con las tres piedras espirituales',
+          alt: 'Ocarina del Tiempo junto con las tres piedras espirituales'
         },
         {
           id: 2,
@@ -31,7 +31,7 @@ export default {
           texto:
             'El control fue rediseñado para una experiencia más moderna: movimiento más suave, salto manual y cámara libre para explorar Hyrule con mayor libertad.',
           img: temploAguaImg,
-          alt: 'Link usando el gancho en el Templo del Agua',
+          alt: 'Link usando el gancho en el Templo del Agua'
         },
         {
           id: 3,
@@ -39,7 +39,7 @@ export default {
           texto:
             'El ciclo de día y noche ahora continúa también dentro de los pueblos, haciendo que lugares como la Ciudadela de Hyrule se sientan más vivos mientras los recorrés.',
           img: ciudadelaImg,
-          alt: 'Link recorriendo la Ciudadela de Hyrule',
+          alt: 'Link recorriendo la Ciudadela de Hyrule'
         },
         {
           id: 4,
@@ -47,7 +47,7 @@ export default {
           texto:
             'Las cinemáticas cuentan con actuaciones de voz y los personajes reciben nuevos diálogos, aportando otra dimensión a momentos que los fans recuerdan desde hace años.',
           img: daruniaImg,
-          alt: 'Link y Darunia forjando una hermandad',
+          alt: 'Link y Darunia forjando una hermandad'
         },
         {
           id: 5,
@@ -55,7 +55,7 @@ export default {
           texto:
             'Con el micrófono de Switch 2, podés tararear una melodía aprendida para que Link la toque dentro del juego.',
           img: sheikImg,
-          alt: 'Sheik tocando su instrumento ancestral',
+          alt: 'Sheik tocando su instrumento ancestral'
         },
         {
           id: 6,
@@ -63,16 +63,16 @@ export default {
           texto:
             'Una nueva función permite consultar tu progreso y el próximo objetivo de la aventura. A medida que avances en el juego, un gran tapiz de la historia se va completando y convierte tu recorrido en una verdadera leyenda.',
           img: progresoImg,
-          alt: "Menú 'Hilos del Tiempo' que registra el progreso del jugador",
-        },
-      ],
+          alt: "Menú 'Hilos del Tiempo' que registra el progreso del jugador"
+        }
+      ]
     }
   },
   computed: {
     tarjetasSecundarias() {
       return this.tarjetas.slice(1)
-    },
-  },
+    }
+  }
 }
 </script>
 

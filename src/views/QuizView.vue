@@ -1,6 +1,9 @@
 <script>
 import castilloImg from '@/assets/imgs/historia/castillo.webp'
 
+const STORAGE_KEY_PERFILES = 'zelda_perfiles_abm'
+const STORAGE_KEY_ACTIVO = 'zelda_perfil_activo_id'
+
 export default {
   name: 'QuizView',
   data() {
@@ -8,7 +11,17 @@ export default {
       castilloImg,
       nombre: '',
       respuestas: [],
+      perfiles: [],
+      perfilActivoId: null,
+      idEditando: null,
       haciendoFormulario: true,
+      editandoDatos: false,
+      perfilAEliminar: null,
+      errores: {
+        nombre: '',
+        preguntas: {},
+        general: ''
+      },
       preguntas: [
         {
           titulo: 'El camino desconocido',
@@ -16,22 +29,22 @@ export default {
           opciones: [
             {
               valor: '{"curiosidad": 2, "coraje": 1}',
-              texto: 'A. Lo sigo inmediatamente. Quiero saber a dónde lleva.',
+              texto: 'A. Lo sigo inmediatamente. Quiero saber a dónde lleva.'
             },
             {
               valor: '{"sabiduria": 2, "inteligencia": 1}',
-              texto: 'B. Primero observo el entorno y busco posibles peligros.',
+              texto: 'B. Primero observo el entorno y busco posibles peligros.'
             },
             {
               valor: '{"astucia": 2, "poder": 1}',
-              texto: 'C. Sigo cautelosamente el camino, pero desde las sombras.',
+              texto: 'C. Sigo cautelosamente el camino, pero desde las sombras.'
             },
             {
               valor: '{"empatia": 2, "sabiduria": 1}',
               texto:
-                'D. Marco un cartel en la entrada del sendero para futuros aventureros antes de continuar.',
-            },
-          ],
+                'D. Marco un cartel en la entrada del sendero para futuros aventureros antes de continuar.'
+            }
+          ]
         },
         {
           titulo: 'Frente al peligro',
@@ -39,22 +52,22 @@ export default {
           opciones: [
             {
               valor: '{"coraje": 2, "poder": 1}',
-              texto: 'A. Me enfrento a él. Retroceder no es una opción.',
+              texto: 'A. Me enfrento a él. Retroceder no es una opción.'
             },
             {
               valor: '{"inteligencia": 2, "sabiduria": 1}',
-              texto: 'B. Estudio sus movimientos antes de atacar.',
+              texto: 'B. Estudio sus movimientos antes de atacar.'
             },
             {
               valor: '{"astucia": 2, "inteligencia": 1}',
-              texto: 'C. Busco una forma de distraerlo o engañarlo.',
+              texto: 'C. Busco una forma de distraerlo o engañarlo.'
             },
             {
               valor: '{"sabiduria": 2, "curiosidad": 1}',
               texto:
-                'D. Intento encontrar otro camino. No tiene sentido arriesgarse innecesariamente.',
-            },
-          ],
+                'D. Intento encontrar otro camino. No tiene sentido arriesgarse innecesariamente.'
+            }
+          ]
         },
         {
           titulo: 'Un objeto misterioso',
@@ -62,21 +75,21 @@ export default {
           opciones: [
             {
               valor: '{"curiosidad": 2, "inteligencia": 1}',
-              texto: 'A. Intento descubrir su función por mi cuenta.',
+              texto: 'A. Intento descubrir su función por mi cuenta.'
             },
             {
               valor: '{"sabiduria": 2, "curiosidad": 1}',
-              texto: 'B. Investigo a mi alrededor en busca de más información.',
+              texto: 'B. Investigo a mi alrededor en busca de más información.'
             },
             {
               valor: '{"poder": 2, "astucia": 1}',
-              texto: 'C. Me la quedo. Mejor tenerlo yo antes que mis enemigos.',
+              texto: 'C. Me la quedo. Mejor tenerlo yo antes que mis enemigos.'
             },
             {
               valor: '{"empatia": 2, "sabiduria": 1}',
-              texto: 'D. Busco a alguien que me pueda ayudar a entenderla.',
-            },
-          ],
+              texto: 'D. Busco a alguien que me pueda ayudar a entenderla.'
+            }
+          ]
         },
         {
           titulo: 'Tu compañero',
@@ -84,22 +97,22 @@ export default {
           opciones: [
             {
               valor: '{"coraje": 2, "empatia": 1}',
-              texto: 'A. Voy directamente a rescatarlo, aunque sea peligroso.',
+              texto: 'A. Voy directamente a rescatarlo, aunque sea peligroso.'
             },
             {
               valor: '{"inteligencia": 2, "empatia": 1}',
-              texto: 'B. Busco la manera más segura de salvarlo.',
+              texto: 'B. Busco la manera más segura de salvarlo.'
             },
             {
               valor: '{"astucia": 2, "inteligencia": 1}',
               texto:
-                'C. Planeo una trampa o distracción para rescatarlo sin enfrentar al enemigo directamente.',
+                'C. Planeo una trampa o distracción para rescatarlo sin enfrentar al enemigo directamente.'
             },
             {
               valor: '{"poder": 2, "astucia": 1}',
-              texto: 'D. Si no se puede defender solo, no me sirve.',
-            },
-          ],
+              texto: 'D. Si no se puede defender solo, no me sirve.'
+            }
+          ]
         },
         {
           titulo: '¿Qué buscás en una aventura?',
@@ -107,25 +120,25 @@ export default {
           opciones: [
             {
               valor: '{"curiosidad": 2, "sabiduria": 1}',
-              texto: 'A. Descubrir lugares que nadie conoce.',
+              texto: 'A. Descubrir lugares que nadie conoce.'
             },
             {
               valor: '{"coraje": 2, "poder": 1}',
-              texto: 'B. Superar desafíos cada vez más difíciles.',
+              texto: 'B. Superar desafíos cada vez más difíciles.'
             },
             {
               valor: '{"inteligencia": 2, "curiosidad": 1}',
-              texto: 'C. Resolver misterios y descubrir cómo funcionan las cosas.',
+              texto: 'C. Resolver misterios y descubrir cómo funcionan las cosas.'
             },
             {
               valor: '{"empatia": 2, "sabiduria": 1}',
-              texto: 'D. Conocer personas y aprender sus historias.',
+              texto: 'D. Conocer personas y aprender sus historias.'
             },
             {
               valor: '{"poder": 2, "coraje": 1}',
-              texto: 'E. Convertirme en alguien capaz de cambiar el destino.',
-            },
-          ],
+              texto: 'E. Convertirme en alguien capaz de cambiar el destino.'
+            }
+          ]
         },
         {
           titulo: 'Tu lugar en Hyrule',
@@ -136,8 +149,8 @@ export default {
             { valor: '{"sabiduria": 2, "empatia": 1}', texto: 'C. Dominio Zora.' },
             { valor: '{"poder": 2, "astucia": 1}', texto: 'D. Fortaleza Gerudo.' },
             { valor: '{"inteligencia": 2, "sabiduria": 1}', texto: 'E. Ciudadela de Hyrule' },
-            { valor: '{"astucia": 2, "poder": 1}', texto: 'F. Aldea Kakariko' },
-          ],
+            { valor: '{"astucia": 2, "poder": 1}', texto: 'F. Aldea Kakariko' }
+          ]
         },
         {
           titulo: 'Una decisión difícil',
@@ -146,21 +159,21 @@ export default {
           opciones: [
             {
               valor: '{"sabiduria": 2, "inteligencia": 1}',
-              texto: 'A. Camino A. Prefiero ir a lo seguro siempre.',
+              texto: 'A. Camino A. Prefiero ir a lo seguro siempre.'
             },
             {
               valor: '{"coraje": 2, "poder": 1}',
-              texto: 'B. Camino B. Las mejores oportunidades siempre implican riesgos.',
+              texto: 'B. Camino B. Las mejores oportunidades siempre implican riesgos.'
             },
             {
               valor: '{"inteligencia": 2, "curiosidad": 1, "astucia": 1}',
-              texto: 'C. Intento descubrir ambas recompensas antes de decidir.',
+              texto: 'C. Intento descubrir ambas recompensas antes de decidir.'
             },
             {
               valor: '{"empatia": 2, "sabiduria": 1}',
-              texto: 'D. Dejo que otro decida y sigo con su plan.',
-            },
-          ],
+              texto: 'D. Dejo que otro decida y sigo con su plan.'
+            }
+          ]
         },
         {
           titulo: 'Tu forma de resolver problemas',
@@ -168,21 +181,21 @@ export default {
           opciones: [
             {
               valor: '{"curiosidad": 2, "inteligencia": 1}',
-              texto: 'A. Busco alrededor. Seguro hay algún mecanismo oculto.',
+              texto: 'A. Busco alrededor. Seguro hay algún mecanismo oculto.'
             },
             {
               valor: '{"poder": 2, "coraje": 1}',
-              texto: 'B. Intento abrirla por la fuerza.',
+              texto: 'B. Intento abrirla por la fuerza.'
             },
             {
               valor: '{"inteligencia": 2, "astucia": 1}',
-              texto: 'C. Pienso en qué otra forma podría pasar.',
+              texto: 'C. Pienso en qué otra forma podría pasar.'
             },
             {
               valor: '{"sabiduria": 2, "curiosidad": 1}',
-              texto: 'D. Exploro el resto a ver si descubro otra cosa.',
-            },
-          ],
+              texto: 'D. Exploro el resto a ver si descubro otra cosa.'
+            }
+          ]
         },
         {
           titulo: 'El poder de la Trifuerza',
@@ -190,21 +203,21 @@ export default {
           opciones: [
             {
               valor: '{"coraje": 3, "empatia": 1}',
-              texto: 'A. Lo necesario para poder defender a quienes quiero.',
+              texto: 'A. Lo necesario para poder defender a quienes quiero.'
             },
             {
               valor: '{"sabiduria": 3, "inteligencia": 1}',
-              texto: 'B. Conocimiento infinito para comprender al mundo.',
+              texto: 'B. Conocimiento infinito para comprender al mundo.'
             },
             {
               valor: '{"poder": 2, "coraje": 1}',
-              texto: 'C. Moldear al mundo a mi semejanza.',
+              texto: 'C. Moldear al mundo a mi semejanza.'
             },
             {
               valor: '{"curiosidad": 1, "poder": 1, "coraje": 1, "sabiduria": 1}',
-              texto: 'D. No pediría nada. Prefiero forjar mi propio destino.',
-            },
-          ],
+              texto: 'D. No pediría nada. Prefiero forjar mi propio destino.'
+            }
+          ]
         },
         {
           titulo: 'Tu legado',
@@ -212,24 +225,24 @@ export default {
           opciones: [
             {
               valor: '{"coraje": 2, "empatia": 1}',
-              texto: 'A. Como alguien que siempre estuvo ahí para los demás.',
+              texto: 'A. Como alguien que siempre estuvo ahí para los demás.'
             },
             {
               valor: '{"sabiduria": 2, "inteligencia": 1}',
-              texto: 'B. Como alguien que descubrió lugares nunca antes vistos.',
+              texto: 'B. Como alguien que descubrió lugares nunca antes vistos.'
             },
             {
               valor: '{"poder": 2, "astucia": 1}',
-              texto: 'C. Como alguien que consiguió cambiar al mundo.',
+              texto: 'C. Como alguien que consiguió cambiar al mundo.'
             },
             { valor: '{"empatia": 2, "coraje": 1}', texto: 'D. Como un héroe.' },
             {
               valor: '{"astucia": 2, "curiosidad": 1}',
-              texto: 'E. No me gustaría ser recordado.',
-            },
-          ],
-        },
-      ],
+              texto: 'E. No me gustaría ser recordado.'
+            }
+          ]
+        }
+      ]
     }
   },
   computed: {
@@ -241,7 +254,7 @@ export default {
         inteligencia: 0,
         curiosidad: 0,
         empatia: 0,
-        astucia: 0,
+        astucia: 0
       }
 
       for (const respuesta of this.respuestas) {
@@ -265,7 +278,7 @@ export default {
         inteligencia: 0,
         curiosidad: 0,
         empatia: 0,
-        astucia: 0,
+        astucia: 0
       }
 
       for (const pregunta of this.preguntas) {
@@ -313,7 +326,7 @@ export default {
           subtitulo: 'El equilibrio entre las tres virtudes',
           simbolo: '⭐',
           descripcion:
-            'No hay una sola virtud que defina tu camino. Coraje, Sabiduría y Poder conviven en equilibrio, y tu fortaleza nace de saber cuándo utilizar cada una.',
+            'No hay una sola virtud que defina tu camino. Coraje, Sabiduría y Poder conviven en equilibrio, y tu fortaleza nace de saber cuándo utilizar cada una.'
         }
       }
 
@@ -326,8 +339,8 @@ export default {
             'La curiosidad te lleva más lejos que cualquier mapa. Preferís descubrir secretos, recorrer caminos desconocidos y encontrar cosas que otros pasaron por alto.',
           afinidad: this.calcularAfinidad([
             ['curiosidad', 0.6],
-            ['inteligencia', 0.4],
-          ]),
+            ['inteligencia', 0.4]
+          ])
         },
         {
           nombre: 'El Guerrero',
@@ -337,8 +350,8 @@ export default {
             'No dudás cuando llega el momento de actuar. Te atraen los desafíos y confías en tu determinación para superar aquello que se interponga en tu camino.',
           afinidad: this.calcularAfinidad([
             ['coraje', 0.6],
-            ['poder', 0.4],
-          ]),
+            ['poder', 0.4]
+          ])
         },
         {
           nombre: 'El Estratega',
@@ -348,8 +361,8 @@ export default {
             'Preferís comprender antes de actuar. Observás, analizás y buscás una solución inteligente antes de entrar en combate o tomar una decisión difícil.',
           afinidad: this.calcularAfinidad([
             ['inteligencia', 0.6],
-            ['astucia', 0.4],
-          ]),
+            ['astucia', 0.4]
+          ])
         },
         {
           nombre: 'El Sabio',
@@ -359,8 +372,8 @@ export default {
             'Tu paciencia y sensibilidad te llevan a buscar respuestas antes de actuar. Te importa tanto entender el mundo como entender a quienes te rodean.',
           afinidad: this.calcularAfinidad([
             ['sabiduria', 0.6],
-            ['empatia', 0.4],
-          ]),
+            ['empatia', 0.4]
+          ])
         },
         {
           nombre: 'El Pícaro',
@@ -370,8 +383,8 @@ export default {
             'Sos adaptable y difícil de predecir. Cuando aparece un problema, preferís usar el ingenio, improvisar y encontrar una solución que nadie más había considerado.',
           afinidad: this.calcularAfinidad([
             ['astucia', 0.6],
-            ['curiosidad', 0.4],
-          ]),
+            ['curiosidad', 0.4]
+          ])
         },
         {
           nombre: 'El Guardián',
@@ -381,8 +394,8 @@ export default {
             'Las personas que te importan ocupan un lugar central en tus decisiones. Tenés el valor necesario para ponerte en peligro cuando alguien necesita tu ayuda.',
           afinidad: this.calcularAfinidad([
             ['empatia', 0.6],
-            ['coraje', 0.4],
-          ]),
+            ['coraje', 0.4]
+          ])
         },
         {
           nombre: 'El Conquistador',
@@ -392,9 +405,9 @@ export default {
             'Tenés una voluntad fuerte y una gran determinación. Cuando querés alcanzar algo, utilizás todos los recursos disponibles para convertir tu objetivo en realidad.',
           afinidad: this.calcularAfinidad([
             ['poder', 0.6],
-            ['astucia', 0.4],
-          ]),
-        },
+            ['astucia', 0.4]
+          ])
+        }
       ]
 
       return personalidades.sort((a, b) => b.afinidad - a.afinidad)[0]
@@ -411,8 +424,8 @@ export default {
           afinidad: this.calcularAfinidad([
             ['curiosidad', 0.45],
             ['empatia', 0.35],
-            ['sabiduria', 0.2],
-          ]),
+            ['sabiduria', 0.2]
+          ])
         },
         {
           nombre: 'Goron',
@@ -423,8 +436,8 @@ export default {
           afinidad: this.calcularAfinidad([
             ['coraje', 0.45],
             ['poder', 0.35],
-            ['empatia', 0.2],
-          ]),
+            ['empatia', 0.2]
+          ])
         },
         {
           nombre: 'Zora',
@@ -435,8 +448,8 @@ export default {
           afinidad: this.calcularAfinidad([
             ['sabiduria', 0.45],
             ['empatia', 0.35],
-            ['inteligencia', 0.2],
-          ]),
+            ['inteligencia', 0.2]
+          ])
         },
         {
           nombre: 'Gerudo',
@@ -447,8 +460,8 @@ export default {
           afinidad: this.calcularAfinidad([
             ['astucia', 0.45],
             ['poder', 0.35],
-            ['curiosidad', 0.2],
-          ]),
+            ['curiosidad', 0.2]
+          ])
         },
         {
           nombre: 'Sheikah',
@@ -459,8 +472,8 @@ export default {
           afinidad: this.calcularAfinidad([
             ['sabiduria', 0.4],
             ['inteligencia', 0.35],
-            ['astucia', 0.25],
-          ]),
+            ['astucia', 0.25]
+          ])
         },
         {
           nombre: 'Hyliano',
@@ -471,9 +484,9 @@ export default {
           afinidad: this.calcularAfinidad([
             ['coraje', 0.35],
             ['sabiduria', 0.35],
-            ['inteligencia', 0.3],
-          ]),
-        },
+            ['inteligencia', 0.3]
+          ])
+        }
       ]
 
       return razas.sort((a, b) => b.afinidad - a.afinidad)[0]
@@ -487,7 +500,7 @@ export default {
           subtitulo: 'El valor para avanzar',
           simbolo: '💚',
           descripcion:
-            'Tu mayor virtud es el Coraje. No significa que nunca tengas miedo, sino que estás dispuesto a avanzar incluso cuando el camino resulta peligroso.',
+            'Tu mayor virtud es el Coraje. No significa que nunca tengas miedo, sino que estás dispuesto a avanzar incluso cuando el camino resulta peligroso.'
         },
         {
           atributo: 'sabiduria',
@@ -495,7 +508,7 @@ export default {
           subtitulo: 'El conocimiento para entender',
           simbolo: '💙',
           descripcion:
-            'Tu mayor virtud es la Sabiduría. Preferís comprender una situación antes de actuar y encontrar respuestas donde otros solo ven obstáculos.',
+            'Tu mayor virtud es la Sabiduría. Preferís comprender una situación antes de actuar y encontrar respuestas donde otros solo ven obstáculos.'
         },
         {
           atributo: 'poder',
@@ -503,8 +516,8 @@ export default {
           subtitulo: 'La voluntad para cambiar el destino',
           simbolo: '💗',
           descripcion:
-            'Tu mayor virtud es el Poder. Tenés una voluntad firme y la determinación necesaria para perseguir aquello que te proponés.',
-        },
+            'Tu mayor virtud es el Poder. Tenés una voluntad firme y la determinación necesaria para perseguir aquello que te proponés.'
+        }
       ]
 
       const diffCS = Math.abs(this.porcentajes.coraje - this.porcentajes.sabiduria)
@@ -518,7 +531,7 @@ export default {
           subtitulo: 'El equilibrio de un alma pura',
           simbolo: '💛',
           descripcion:
-            'Tus virtudes están perfectamente equilibradas. Eres una persona digna de obtener la Trifuerza completa, y así, traer a Hyrule una nueva era.',
+            'Tus virtudes están perfectamente equilibradas. Eres una persona digna de obtener la Trifuerza completa, y así, traer a Hyrule una nueva era.'
         }
       }
 
@@ -533,13 +546,13 @@ export default {
         return {
           titulo: pregunta.titulo,
           texto: pregunta.texto,
-          respuestaTexto: opcionElegida ? opcionElegida.texto : 'Sin responder',
+          respuestaTexto: opcionElegida ? opcionElegida.texto : 'Sin responder'
         }
       })
-    },
+    }
   },
   mounted() {
-    this.cargarPerfil()
+    this.cargarPerfiles()
   },
   methods: {
     nombreAtributos(atributo) {
@@ -550,52 +563,220 @@ export default {
         inteligencia: 'Inteligencia',
         curiosidad: 'Curiosidad',
         empatia: 'Empatía',
-        astucia: 'Astucia',
+        astucia: 'Astucia'
       }
 
       return nombres[atributo] || atributo
     },
+
     calcularAfinidad(combinacion) {
       return combinacion.reduce((total, [atributo, peso]) => {
         return total + this.porcentajes[atributo] * peso
       }, 0)
     },
-    calcularResultado() {
-      this.haciendoFormulario = false
-      this.imprimirAtributos()
-      this.guardarPerfil()
-    },
-    imprimirAtributos() {
-      for (const [clave, valor] of Object.entries(this.atributos)) {
-        console.log(`${clave}: ${valor}`)
-      }
-      console.log('\n\n')
-    },
-    guardarPerfil() {
-      localStorage.setItem('nombre', this.nombre)
-      localStorage.setItem('respuestas', JSON.stringify(this.respuestas))
-    },
-    cargarPerfil() {
-      const nombreGuardado = localStorage.getItem('nombre')
-      const respuestasGuardadas = localStorage.getItem('respuestas')
 
-      if (nombreGuardado) {
-        this.nombre = nombreGuardado
-      }
-      if (respuestasGuardadas) {
-        this.respuestas = JSON.parse(respuestasGuardadas)
-      }
-      if (this.nombre !== '' && this.respuestas.length > 0) {
-        this.haciendoFormulario = false
+    limpiarErrores() {
+      this.errores = {
+        nombre: '',
+        preguntas: {},
+        general: ''
       }
     },
-    reiniciarQuiz() {
+
+    validarFormulario() {
+      this.limpiarErrores()
+      let esValido = true
+      const nombreLimpio = this.nombre.trim()
+
+      if (!nombreLimpio) {
+        this.errores.nombre = 'Tenés que ingresar un nombre para tu aventurero.'
+        esValido = false
+      } else if (nombreLimpio.length < 2) {
+        this.errores.nombre = 'El nombre debe tener al menos 2 caracteres.'
+        esValido = false
+      } else if (nombreLimpio.length > 30) {
+        this.errores.nombre = 'El nombre no puede superar los 30 caracteres.'
+        esValido = false
+      }
+
+      let preguntasSinResponder = 0
+      this.preguntas.forEach((pregunta, index) => {
+        if (!this.respuestas[index]) {
+          this.errores.preguntas[index] = 'Seleccioná una opción para esta pregunta.'
+          preguntasSinResponder += 1
+          esValido = false
+        }
+      })
+
+      if (!esValido) {
+        if (preguntasSinResponder > 0) {
+          this.errores.general = `Revisá el formulario: faltan responder ${preguntasSinResponder} pregunta(s) o corregir el nombre.`
+        } else {
+          this.errores.general = 'Revisá el nombre ingresado antes de continuar.'
+        }
+      }
+
+      return esValido
+    },
+
+    limpiarErrorPregunta(index) {
+      if (this.errores.preguntas[index]) {
+        this.errores.preguntas[index] = ''
+      }
+    },
+
+    guardarEnLocalStorage() {
+      localStorage.setItem(STORAGE_KEY_PERFILES, JSON.stringify(this.perfiles))
+      if (this.perfilActivoId !== null) {
+        localStorage.setItem(STORAGE_KEY_ACTIVO, String(this.perfilActivoId))
+      } else {
+        localStorage.removeItem(STORAGE_KEY_ACTIVO)
+      }
+    },
+
+    cargarPerfiles() {
+      const perfilesGuardados = localStorage.getItem(STORAGE_KEY_PERFILES)
+
+      if (perfilesGuardados) {
+        this.perfiles = JSON.parse(perfilesGuardados)
+      }
+
+      if (this.perfiles.length > 0) {
+        const idActivoGuardado = Number(localStorage.getItem(STORAGE_KEY_ACTIVO))
+        const perfilEncontrado =
+          this.perfiles.find((item) => item.id === idActivoGuardado) || this.perfiles[0]
+
+        this.seleccionarPerfil(perfilEncontrado.id)
+      } else {
+        this.iniciarNuevoPerfil()
+      }
+    },
+
+    guardarNuevoPerfil() {
+      if (!this.validarFormulario()) return
+
+      const nuevoPerfil = {
+        id: Date.now(),
+        nombre: this.nombre.trim(),
+        respuestas: [...this.respuestas],
+        resumen: {
+          personalidad: `${this.personalidad.simbolo} ${this.personalidad.nombre}`,
+          raza: `${this.raza.simbolo} ${this.raza.nombre}`,
+          trifuerza: `${this.trifuerza.simbolo} ${this.trifuerza.nombre}`
+        },
+        fecha: new Date().toLocaleDateString('es-AR')
+      }
+
+      this.perfiles.unshift(nuevoPerfil)
+      this.perfilActivoId = nuevoPerfil.id
+      this.haciendoFormulario = false
+      this.editandoDatos = false
+      this.guardarEnLocalStorage()
+    },
+
+    seleccionarPerfil(id) {
+      const perfil = this.perfiles.find((item) => item.id === id)
+      if (!perfil) return
+
+      this.perfilActivoId = perfil.id
+      this.nombre = perfil.nombre
+      this.respuestas = [...perfil.respuestas]
+      this.haciendoFormulario = false
+      this.editandoDatos = false
+      this.idEditando = null
+      this.limpiarErrores()
+      this.guardarEnLocalStorage()
+    },
+
+    iniciarNuevoPerfil() {
       this.nombre = ''
-      this.respuestas = []
+      this.respuestas = Array(this.preguntas.length).fill('')
+      this.idEditando = null
+      this.editandoDatos = false
       this.haciendoFormulario = true
-      localStorage.clear()
+      this.limpiarErrores()
     },
-  },
+
+    abrirEdicion(id) {
+      const perfil = this.perfiles.find((item) => item.id === id)
+      if (!perfil) return
+
+      this.idEditando = perfil.id
+      this.nombre = perfil.nombre
+      this.respuestas = [...perfil.respuestas]
+      this.haciendoFormulario = false
+      this.editandoDatos = true
+      this.limpiarErrores()
+    },
+
+    guardarEdicion() {
+      if (!this.validarFormulario()) return
+
+      const indice = this.perfiles.findIndex((item) => item.id === this.idEditando)
+      if (indice === -1) return
+
+      this.perfiles[indice] = {
+        ...this.perfiles[indice],
+        nombre: this.nombre.trim(),
+        respuestas: [...this.respuestas],
+        resumen: {
+          personalidad: `${this.personalidad.simbolo} ${this.personalidad.nombre}`,
+          raza: `${this.raza.simbolo} ${this.raza.nombre}`,
+          trifuerza: `${this.trifuerza.simbolo} ${this.trifuerza.nombre}`
+        },
+        fecha: new Date().toLocaleDateString('es-AR')
+      }
+
+      this.perfilActivoId = this.idEditando
+      this.idEditando = null
+      this.editandoDatos = false
+      this.haciendoFormulario = false
+      this.guardarEnLocalStorage()
+    },
+
+    cancelarEdicion() {
+      this.editandoDatos = false
+      this.idEditando = null
+      this.limpiarErrores()
+
+      if (this.perfilActivoId !== null) {
+        this.seleccionarPerfil(this.perfilActivoId)
+      } else if (this.perfiles.length > 0) {
+        this.seleccionarPerfil(this.perfiles[0].id)
+      } else {
+        this.iniciarNuevoPerfil()
+      }
+    },
+
+    solicitarEliminacion(perfil) {
+      this.perfilAEliminar = perfil
+    },
+
+    cancelarEliminacion() {
+      this.perfilAEliminar = null
+    },
+
+    confirmarEliminacion() {
+      if (!this.perfilAEliminar) return
+
+      const idEliminado = this.perfilAEliminar.id
+      this.perfiles = this.perfiles.filter((item) => item.id !== idEliminado)
+      this.perfilAEliminar = null
+
+      if (this.perfiles.length === 0) {
+        this.perfilActivoId = null
+        this.guardarEnLocalStorage()
+        this.iniciarNuevoPerfil()
+        return
+      }
+
+      if (this.perfilActivoId === idEliminado || this.idEditando === idEliminado) {
+        this.seleccionarPerfil(this.perfiles[0].id)
+      } else {
+        this.guardarEnLocalStorage()
+      }
+    }
+  }
 }
 </script>
 
@@ -603,30 +784,92 @@ export default {
   <section id="quiz">
     <img :src="castilloImg" alt="Castillo de Hyrule" class="mb-4 rounded-4 shadow" />
 
-    <div v-if="haciendoFormulario == true">
+    <section v-if="perfiles.length > 0" class="panel-perfiles mb-5">
+      <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+        <div>
+          <h2 class="h3 m-0 text-start titulo-panel">Perfiles guardados ({{ perfiles.length }})</h2>
+          <p class="mb-0 subtitulo-panel">
+            Visualizá, modificá o eliminá tus aventureros guardados en Hyrule.
+          </p>
+        </div>
+        <button type="button" class="btn btn-nuevo" @click="iniciarNuevoPerfil">
+          + Nuevo aventurero
+        </button>
+      </div>
+
+      <div class="row g-3">
+        <div v-for="item in perfiles" :key="item.id" class="col-12 col-md-6">
+          <article
+            class="tarjeta-perfil h-100 d-flex flex-column justify-content-between"
+            :class="{ activo: item.id === perfilActivoId && !haciendoFormulario && !editandoDatos }"
+          >
+            <div>
+              <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
+                <h3 class="h5 m-0">{{ item.nombre }}</h3>
+                <span class="badge-fecha">{{ item.fecha }}</span>
+              </div>
+              <ul class="lista-resumen-perfil">
+                <li>{{ item.resumen.personalidad }}</li>
+                <li>{{ item.resumen.raza }}</li>
+                <li>{{ item.resumen.trifuerza }}</li>
+              </ul>
+            </div>
+
+            <div class="d-flex flex-wrap gap-2 mt-3">
+              <button
+                type="button"
+                class="btn btn-sm btn-accion-ver"
+                @click="seleccionarPerfil(item.id)"
+              >
+                Ver perfil
+              </button>
+              <button
+                type="button"
+                class="btn btn-sm btn-accion-editar"
+                @click="abrirEdicion(item.id)"
+              >
+                Modificar
+              </button>
+              <button
+                type="button"
+                class="btn btn-sm btn-accion-eliminar"
+                @click="solicitarEliminacion(item)"
+              >
+                Eliminar
+              </button>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <div v-if="haciendoFormulario">
       <h2 class="h1">¿Qué destino te depara?</h2>
       <p>
         Las decisiones que tomes determinarán qué clase de aventurero serías, a qué pueblo
         pertenecerías y qué fragmento de la Trifuerza resonaría contigo.
       </p>
-      <form
-        class="row g-3"
-        action="#"
-        method="post"
-        enctype="multipart/form-data"
-        @submit.prevent="calcularResultado"
-      >
+
+      <div v-if="errores.general" class="alerta-error mb-3" role="alert">
+        {{ errores.general }}
+      </div>
+
+      <form class="row g-3" novalidate @submit.prevent="guardarNuevoPerfil">
         <div class="col-12">
           <label class="form-label" for="inputNombre">¿Cómo te gustaría que te llamen?</label>
           <input
             id="inputNombre"
-            v-model.trim.lazy="nombre"
+            v-model.trim="nombre"
             class="form-control"
+            :class="{ 'campo-invalido': errores.nombre }"
             type="text"
             name="nombre"
-            required
+            placeholder="Ej: Link de Kokiri"
+            @input="errores.nombre = ''"
           />
+          <p v-if="errores.nombre" class="mensaje-error">{{ errores.nombre }}</p>
         </div>
+
         <div
           v-for="(pregunta, index) in preguntas"
           :key="index"
@@ -638,9 +881,10 @@ export default {
             :id="'inputPregunta' + index"
             v-model="respuestas[index]"
             class="form-select mt-auto"
-            required
+            :class="{ 'campo-invalido': errores.preguntas[index] }"
+            @change="limpiarErrorPregunta(index)"
           >
-            <option selected disabled value="">Elige...</option>
+            <option disabled value="">Elige...</option>
             <option
               v-for="(opcion, index2) in pregunta.opciones"
               :key="index2"
@@ -649,15 +893,106 @@ export default {
               {{ opcion.texto }}
             </option>
           </select>
+          <p v-if="errores.preguntas[index]" class="mensaje-error">
+            {{ errores.preguntas[index] }}
+          </p>
         </div>
 
-        <button type="submit" class="btn btn-primary">Ver resultados</button>
+        <div class="col-12 d-flex flex-wrap justify-content-center gap-3 mt-4">
+          <button type="submit" class="btn btn-primary m-0">Ver y guardar resultados</button>
+          <button
+            v-if="perfiles.length > 0"
+            type="button"
+            class="btn btn-secundario"
+            @click="cancelarEdicion"
+          >
+            Cancelar
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <div v-else-if="editandoDatos">
+      <h2 class="h1">Modificar perfil</h2>
+      <p>Editá el nombre o cambiá cualquiera de tus decisiones para recalcular tu destino.</p>
+
+      <div v-if="errores.general" class="alerta-error mb-3" role="alert">
+        {{ errores.general }}
+      </div>
+
+      <form class="row g-3" novalidate @submit.prevent="guardarEdicion">
+        <div class="col-12">
+          <label class="form-label" for="inputNombreEditar">Nombre del aventurero</label>
+          <input
+            id="inputNombreEditar"
+            v-model.trim="nombre"
+            class="form-control"
+            :class="{ 'campo-invalido': errores.nombre }"
+            type="text"
+            name="nombreEditar"
+            @input="errores.nombre = ''"
+          />
+          <p v-if="errores.nombre" class="mensaje-error">{{ errores.nombre }}</p>
+        </div>
+
+        <div
+          v-for="(pregunta, index) in preguntas"
+          :key="index"
+          class="col-md-6 d-flex flex-column"
+        >
+          <h3>{{ pregunta.titulo }}</h3>
+          <label :for="'editarPregunta' + index" class="form-label mb-2">{{
+            pregunta.texto
+          }}</label>
+          <select
+            :id="'editarPregunta' + index"
+            v-model="respuestas[index]"
+            class="form-select mt-auto"
+            :class="{ 'campo-invalido': errores.preguntas[index] }"
+            @change="limpiarErrorPregunta(index)"
+          >
+            <option disabled value="">Elige...</option>
+            <option
+              v-for="(opcion, index2) in pregunta.opciones"
+              :key="index2"
+              :value="opcion.valor"
+            >
+              {{ opcion.texto }}
+            </option>
+          </select>
+          <p v-if="errores.preguntas[index]" class="mensaje-error">
+            {{ errores.preguntas[index] }}
+          </p>
+        </div>
+
+        <div class="col-12 d-flex flex-wrap justify-content-center gap-3 mt-4">
+          <button type="submit" class="btn btn-primary m-0">Guardar cambios</button>
+          <button type="button" class="btn btn-secundario" @click="cancelarEdicion">
+            Cancelar edición
+          </button>
+        </div>
       </form>
     </div>
 
     <div v-else>
       <h2 class="h1">Tu Perfil</h2>
       <p class="h2">{{ nombre }}</p>
+
+      <div class="d-flex flex-wrap justify-content-center gap-3 mb-4">
+        <button type="button" class="btn btn-primary m-0" @click="abrirEdicion(perfilActivoId)">
+          Modificar este perfil
+        </button>
+        <button type="button" class="btn btn-secundario" @click="iniciarNuevoPerfil">
+          Crear otro perfil
+        </button>
+        <button
+          type="button"
+          class="btn btn-eliminar-grande"
+          @click="solicitarEliminacion(perfiles.find((item) => item.id === perfilActivoId))"
+        >
+          Eliminar este perfil
+        </button>
+      </div>
 
       <section class="personalidad">
         <h3 class="fw-bold">Tu Personalidad</h3>
@@ -715,10 +1050,24 @@ export default {
           </li>
         </ol>
       </section>
+    </div>
 
-      <button type="button" class="btn btn-primary" @click="reiniciarQuiz()">
-        Hacer el cuestionario de nuevo
-      </button>
+    <div v-if="perfilAEliminar" class="modal-confirmacion-overlay" role="dialog" aria-modal="true">
+      <div class="modal-confirmacion">
+        <h3>Confirmar eliminación</h3>
+        <p>
+          ¿Estás seguro de que querés eliminar el perfil de
+          <strong>{{ perfilAEliminar.nombre }}</strong>? Esta acción no se puede deshacer.
+        </p>
+        <div class="d-flex justify-content-center gap-3 mt-4">
+          <button type="button" class="btn btn-eliminar-grande" @click="confirmarEliminacion">
+            Sí, eliminar
+          </button>
+          <button type="button" class="btn btn-secundario" @click="cancelarEliminacion">
+            Cancelar
+          </button>
+        </div>
+      </div>
     </div>
   </section>
 </template>

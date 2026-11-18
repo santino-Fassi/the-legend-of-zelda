@@ -9,7 +9,7 @@ export default {
       gossipStoneImg,
       hoy: new Date(),
       lanzamiento: new Date(2026, 10, 5),
-      rebotando: false,
+      rebotando: false
     }
   },
   computed: {
@@ -23,7 +23,7 @@ export default {
       } else {
         return '¡BOINNG! ¡BOINNG! ¡El juego ya está disponible!'
       }
-    },
+    }
   },
   mounted() {
     this.inicializarPopover()
@@ -39,8 +39,8 @@ export default {
     },
     finRebote() {
       this.rebotando = false
-    },
-  },
+    }
+  }
 }
 </script>
 

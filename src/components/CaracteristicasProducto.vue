@@ -10,11 +10,11 @@ export default {
     'editor',
     'idiomas',
     'lanzamiento',
-    'clasificacion',
+    'clasificacion'
   ],
   data() {
     return {}
-  },
+  }
 }
 </script>
 

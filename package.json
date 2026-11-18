@@ -10,7 +10,7 @@
     "lint": "run-s \"lint:*\"",
     "lint:oxlint": "oxlint . --fix",
     "lint:eslint": "eslint . --fix --cache",
-    "format": "oxfmt src/"
+    "format": "prettier --write src/"
   },
   "dependencies": {
     "@fontsource/marcellus": "^5.1.0",
@@ -30,6 +30,7 @@
     "npm-run-all2": "^9.0.3",
     "oxfmt": "^0.67.0",
     "oxlint": "~1.82.0",
+    "prettier": "^3.10.1",
     "vite": "^8.2.2",
     "vite-plugin-vue-devtools": "^8.2.1",
     "vue-eslint-parser": "^10.4.1"

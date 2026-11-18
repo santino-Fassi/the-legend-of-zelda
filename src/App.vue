@@ -7,15 +7,15 @@ import gastagerImg from '@/assets/imgs/gastager.webp'
 export default {
   name: 'App',
   components: {
-    PiedraChismosa,
+    PiedraChismosa
   },
   data() {
     return {
       logoImg,
       fassiImg,
-      gastagerImg,
+      gastagerImg
     }
-  },
+  }
 }
 </script>
 
