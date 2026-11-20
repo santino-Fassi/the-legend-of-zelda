@@ -1053,7 +1053,7 @@ export default {
     </div>
 
     <div v-if="perfilAEliminar" class="modal-confirmacion-overlay" role="dialog" aria-modal="true">
-      <div class="modal-confirmacion">
+      <div class="modal-confirmacion animate__animated animate__fadeIn">
         <h3>Confirmar eliminación</h3>
         <p>
           ¿Estás seguro de que querés eliminar el perfil de
