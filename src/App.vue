@@ -13,7 +13,13 @@ export default {
     return {
       logoImg,
       fassiImg,
-      gastagerImg
+      gastagerImg,
+      rebotes: 0
+    }
+  },
+  methods: {
+    manejarRebote() {
+      this.rebotes++
     }
   }
 }
@@ -28,7 +34,10 @@ export default {
           <img class="d-none d-lg-block logo d-inline-block" :src="logoImg" alt="Logo de Zelda" />
           <span class="d-lg-none h1 py-3 text-light">Nintendo</span>
         </RouterLink>
-        <PiedraChismosa class="order-lg-last ms-auto me-2 me-lg-0 ms-lg-3" />
+        <PiedraChismosa
+          class="order-lg-last ms-auto me-2 me-lg-0 ms-lg-3"
+          @rebote="manejarRebote"
+        />
         <button
           class="navbar-toggler"
           type="button"
@@ -60,6 +69,11 @@ export default {
 
   <footer class="py-2 mt-4 container-fluid rounded-bottom rounded-4">
     <div class="row">
+      <div class="col-12">
+        <p class="h3 text-center py-3">
+          ¡Usted hizo rebotar la piedra chismosa {{ rebotes }} {{ rebotes == 1 ? 'vez' : 'veces' }}!
+        </p>
+      </div>
       <div class="c_autor text-center col-12 col-md-6">
         <img
           class="mb-3 border-2"

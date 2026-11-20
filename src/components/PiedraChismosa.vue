@@ -4,12 +4,14 @@ import gossipStoneImg from '@/assets/imgs/gossip-stone.webp'
 
 export default {
   name: 'PiedraChismosa',
+  emits: ['rebote'],
   data() {
     return {
       gossipStoneImg,
       hoy: new Date(),
       lanzamiento: new Date(2026, 10, 5),
-      rebotando: false
+      rebotando: false,
+      rebotes: 0
     }
   },
   computed: {
@@ -35,7 +37,11 @@ export default {
       }
     },
     rebotar() {
-      if (!this.rebotando) this.rebotando = true
+      if (!this.rebotando) {
+        this.rebotando = true
+        this.rebotes++
+        this.$emit('rebote', this.rebotes)
+      }
     },
     finRebote() {
       this.rebotando = false
@@ -46,7 +52,7 @@ export default {
 
 <template>
   <div>
-    <a
+    <button
       ref="popoverBtn"
       tabindex="0"
       class="btn"
@@ -66,6 +72,6 @@ export default {
         alt="Piedra Chismosa"
         @animationend="finRebote"
       />
-    </a>
+    </button>
   </div>
 </template>
